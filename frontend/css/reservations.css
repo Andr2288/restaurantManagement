@@ -1,0 +1,621 @@
+/* css/reservation.css - Стилі для розширеної резервації */
+
+/* Основна секція резервації */
+.reservation-advanced {
+    padding: 2rem 0 4rem;
+    min-height: 100vh;
+}
+
+/* Календар */
+.calendar-wrapper {
+    max-width: 100%;
+    margin-bottom: 2rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+}
+
+.calendar-header h4 {
+    margin: 0;
+    color: var(--secondary-color);
+    font-size: 1.3rem;
+}
+
+.calendar-header .btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: var(--gray-300);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.calendar-day {
+    background: white;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-weight: 500;
+}
+
+.calendar-day-header {
+    background: var(--gray-100);
+    font-weight: 600;
+    color: var(--gray-700);
+    cursor: default;
+    font-size: 0.9rem;
+}
+
+.calendar-day:not(.calendar-day-header):hover {
+    background: var(--light-bg);
+    transform: scale(1.05);
+}
+
+.calendar-day.other-month {
+    color: var(--gray-400);
+    background: var(--gray-50);
+}
+
+.calendar-day.past {
+    color: var(--gray-400);
+    background: var(--gray-100);
+    cursor: not-allowed;
+}
+
+.calendar-day.past:hover {
+    background: var(--gray-100);
+    transform: none;
+}
+
+.calendar-day.today {
+    background: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.calendar-day.selected {
+    background: var(--secondary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.calendar-day.has-reservations::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 6px;
+    height: 6px;
+    background: var(--warning-color);
+    border-radius: 50%;
+}
+
+/* Часові слоти */
+.time-slots-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.time-slot {
+    padding: 10px 15px;
+    border: 2px solid var(--gray-300);
+    border-radius: var(--border-radius);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: white;
+    font-weight: 500;
+}
+
+.time-slot:hover {
+    border-color: var(--primary-color);
+    background: var(--light-bg);
+}
+
+.time-slot.occupied {
+    background: var(--gray-200);
+    color: var(--gray-500);
+    cursor: not-allowed;
+    border-color: var(--gray-300);
+}
+
+.time-slot.occupied:hover {
+    background: var(--gray-200);
+    border-color: var(--gray-300);
+}
+
+.time-slot.selected {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Схема ресторану */
+.table-legend {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: 1px solid var(--gray-300);
+}
+
+.legend-color.available {
+    background: var(--success-color);
+}
+
+.legend-color.occupied {
+    background: var(--danger-color);
+}
+
+.legend-color.selected {
+    background: var(--primary-color);
+}
+
+.restaurant-layout {
+    position: relative;
+    background: var(--light-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    min-height: 400px;
+    overflow: hidden;
+}
+
+/* Зони ресторану */
+.restaurant-zone {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.zone-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.tables-grid {
+    display: grid;
+    gap: 15px;
+    justify-content: center;
+}
+
+.tables-grid.window-zone {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.tables-grid.center-zone {
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0 auto;
+    max-width: 300px;
+}
+
+.tables-grid.large-zone {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.tables-grid.bar-zone {
+    grid-template-columns: 1fr;
+    max-width: 150px;
+    margin: 0 auto;
+}
+
+/* Столики */
+.restaurant-table {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 3px solid var(--gray-300);
+    background: white;
+    position: relative;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-table:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.restaurant-table.square {
+    border-radius: 10px;
+    width: 100px;
+    height: 60px;
+}
+
+.restaurant-table.available {
+    border-color: var(--success-color);
+    background: #f8fff9;
+}
+
+.restaurant-table.occupied {
+    border-color: var(--danger-color);
+    background: #fff8f8;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.restaurant-table.occupied:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-table.selected {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+}
+
+.table-number {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.table-capacity {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+/* Декоративні елементи */
+.restaurant-layout::before {
+    content: '🚪';
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+}
+
+.restaurant-layout::after {
+    content: '🧑‍🍳 Кухня';
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    background: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    border: 1px solid var(--gray-300);
+}
+
+/* Форма резервації */
+.reservation-summary {
+    background: var(--light-bg);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--primary-color);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.summary-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Селектор гостей */
+.guests-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.guests-input {
+    max-width: 80px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.guests-selector .btn {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Чекбокси */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.checkbox-label:hover {
+    background: var(--light-bg);
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+    transform: scale(1.2);
+}
+
+/* Інформаційна панель */
+.info-item {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-item strong {
+    display: block;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.info-item p {
+    margin: 0;
+    color: var(--gray-600);
+}
+
+/* Список резервацій */
+.reservations-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.reservation-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    transition: var(--transition);
+}
+
+.reservation-card:hover {
+    box-shadow: var(--box-shadow);
+    transform: translateY(-2px);
+}
+
+.reservation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.reservation-time {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.reservation-status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.reservation-status.confirmed {
+    background: var(--success-color);
+    color: white;
+}
+
+.reservation-status.pending {
+    background: var(--warning-color);
+    color: white;
+}
+
+.reservation-details {
+    color: var(--gray-700);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+/* Модальне вікно підтвердження */
+.confirmation-details {
+    text-align: center;
+}
+
+.confirmation-details .summary-item {
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Анімації */
+.fade-in-up {
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .calendar-grid {
+        font-size: 0.9rem;
+    }
+
+    .calendar-day {
+        min-height: 40px;
+        padding: 8px 4px;
+    }
+
+    .time-slots {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .restaurant-layout {
+        padding: 1rem;
+        min-height: 300px;
+    }
+
+    .restaurant-table {
+        width: 60px;
+        height: 60px;
+    }
+
+    .restaurant-table.square {
+        width: 80px;
+        height: 50px;
+    }
+
+    .table-number {
+        font-size: 0.9rem;
+    }
+
+    .table-capacity {
+        font-size: 0.7rem;
+    }
+
+    .tables-grid.window-zone,
+    .tables-grid.center-zone,
+    .tables-grid.large-zone {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .reservations-list {
+        grid-template-columns: 1fr;
+    }
+
+    .table-legend {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar-header {
+        padding: 0;
+    }
+
+    .calendar-header h4 {
+        font-size: 1.1rem;
+    }
+
+    .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .guests-selector {
+        justify-content: center;
+    }
+
+    .checkbox-label {
+        font-size: 0.9rem;
+        padding: 6px 8px;
+    }
+
+    .restaurant-table {
+        width: 50px;
+        height: 50px;
+    }
+
+    .restaurant-table.square {
+        width: 70px;
+        height: 45px;
+    }
+}
+
+/* Статуси завантаження */
+.loading-calendar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: var(--gray-500);
+}
+
+.loading-tables {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: var(--gray-500);
+}

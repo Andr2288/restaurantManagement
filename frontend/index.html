@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ресторан "Смачна кухня" - Головна сторінка</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/client.css">
+</head>
+<body>
+<!-- Навігація -->
+<nav class="navbar">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="#" class="navbar-brand">🍽️ Смачна кухня</a>
+
+            <div class="navbar-nav d-flex">
+                <a href="#hero" class="nav-link">Головна</a>
+                <a href="#menu" class="nav-link">Меню</a>
+                <a href="#reservation" class="nav-link">Резервація</a>
+                <a href="#feedback" class="nav-link">Відгуки</a>
+                <a href="admin.html" class="nav-link">Адмін</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Головний банер -->
+<section id="hero" class="hero">
+    <div class="hero-overlay">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1 class="hero-title">Ласкаво просимо до ресторану<br>"Смачна кухня"</h1>
+                <p class="hero-subtitle">Справжня українська кухня з європейським підходом</p>
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn btn-primary btn-lg">Переглянути меню</a>
+                    <a href="#reservation" class="btn btn-outline btn-lg">Забронювати столик</a>
+                    <a href="reservation.html" class="btn btn-secondary btn-lg">Розширена резервація</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Меню ресторану -->
+<section id="menu" class="menu-section">
+    <div class="container">
+        <h2 class="section-title text-center">Наше меню</h2>
+        <p class="section-subtitle text-center">Обирайте з найкращих страв української та європейської кухні</p>
+
+        <!-- Фільтри категорій -->
+        <div class="menu-filters text-center mb-4">
+            <button class="btn btn-outline active" data-category="all">Всі страви</button>
+            <button class="btn btn-outline" data-category="Салати">Салати</button>
+            <button class="btn btn-outline" data-category="Супи">Супи</button>
+            <button class="btn btn-outline" data-category="Основні страви">Основні страви</button>
+            <button class="btn btn-outline" data-category="Десерти">Десерти</button>
+            <button class="btn btn-outline" data-category="Напої">Напої</button>
+        </div>
+
+        <!-- Список страв -->
+        <div id="menu-container" class="menu-grid">
+            <!-- Страви будуть додані динамічно -->
+        </div>
+    </div>
+</section>
+
+<!-- Резервація столиків -->
+<section id="reservation" class="reservation-section bg-light">
+    <div class="container">
+        <h2 class="section-title text-center">Забронювати столик</h2>
+        <p class="section-subtitle text-center">Зарезервуйте столик на зручний для вас час</p>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Форма резервації</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="reservation-form">
+                            <div class="form-group">
+                                <label class="form-label" for="customer_name">Ваше ім'я *</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="customer_phone">Номер телефону *</label>
+                                <input type="tel" class="form-control" id="customer_phone" name="customer_phone"
+                                       placeholder="+380501234567" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="reservation_date">Дата *</label>
+                                        <input type="date" class="form-control" id="reservation_date"
+                                               name="reservation_date" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="reservation_time">Час *</label>
+                                        <select class="form-control" id="reservation_time" name="reservation_time" required>
+                                            <option value="">Оберіть час</option>
+                                            <option value="12:00">12:00</option>
+                                            <option value="12:30">12:30</option>
+                                            <option value="13:00">13:00</option>
+                                            <option value="13:30">13:30</option>
+                                            <option value="14:00">14:00</option>
+                                            <option value="14:30">14:30</option>
+                                            <option value="18:00">18:00</option>
+                                            <option value="18:30">18:30</option>
+                                            <option value="19:00">19:00</option>
+                                            <option value="19:30">19:30</option>
+                                            <option value="20:00">20:00</option>
+                                            <option value="20:30">20:30</option>
+                                            <option value="21:00">21:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="number_of_guests">Кількість гостей *</label>
+                                        <select class="form-control" id="number_of_guests" name="number_of_guests" required>
+                                            <option value="">Оберіть кількість</option>
+                                            <option value="1">1 особа</option>
+                                            <option value="2">2 особи</option>
+                                            <option value="3">3 особи</option>
+                                            <option value="4">4 особи</option>
+                                            <option value="5">5 осіб</option>
+                                            <option value="6">6 осіб</option>
+                                            <option value="7">7 осіб</option>
+                                            <option value="8">8 осіб</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="table_id">Столик</label>
+                                        <select class="form-control" id="table_id" name="table_id">
+                                            <option value="">Будь-який доступний</option>
+                                            <!-- Столики будуть додані динамічно -->
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="notes">Додаткові побажання</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="3"
+                                          placeholder="Наприклад: день народження, дієтичні вимоги..."></textarea>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Забронювати столик</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="reservation-info">
+                    <h3>Інформація про резервацію</h3>
+                    <div class="info-card">
+                        <h4>⏰ Години роботи:</h4>
+                        <p>Понеділок - Четвер: 12:00 - 22:00<br>
+                            П'ятниця - Субота: 12:00 - 23:00<br>
+                            Неділя: 12:00 - 21:00</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>📋 Умови резервації:</h4>
+                        <ul>
+                            <li>Резервація діє протягом 2 годин</li>
+                            <li>За спізнення більше ніж на 15 хвилин столик може бути переданий іншим гостям</li>
+                            <li>Для груп більше 8 осіб зверніться по телефону</li>
+                            <li>Скасування резервації можливе за 2 години до часу візиту</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h4>📞 Контакти:</h4>
+                        <p>Телефон: +38 (044) 123-45-67<br>
+                            Email: info@smachna-kuhnya.com.ua<br>
+                            Адреса: вул. Хрещатик, 1, Київ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Відгуки клієнтів -->
+<section id="feedback" class="feedback-section">
+    <div class="container">
+        <h2 class="section-title text-center">Відгуки наших гостей</h2>
+        <p class="section-subtitle text-center">Дізнайтеся, що кажуть про нас наші клієнти</p>
+
+        <div class="row">
+            <div class="col-8">
+                <div id="feedback-container" class="feedback-list">
+                    <!-- Відгуки будуть додані динамічно -->
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Статистика відгуків</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="feedback-stats">
+                            <!-- Статистика буде додана динамічно -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h3>Залишити відгук</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="feedback-form">
+                            <div class="form-group">
+                                <label class="form-label" for="feedback_customer_name">Ваше ім'я</label>
+                                <input type="text" class="form-control" id="feedback_customer_name"
+                                       name="customer_name" placeholder="Анонім">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="rating">Оцінка *</label>
+                                <div class="rating-stars">
+                                    <span class="star" data-rating="1">⭐</span>
+                                    <span class="star" data-rating="2">⭐</span>
+                                    <span class="star" data-rating="3">⭐</span>
+                                    <span class="star" data-rating="4">⭐</span>
+                                    <span class="star" data-rating="5">⭐</span>
+                                </div>
+                                <input type="hidden" id="rating" name="rating" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="feedback_comments">Ваш відгук</label>
+                                <textarea class="form-control" id="feedback_comments" name="comments"
+                                          rows="4" placeholder="Розкажіть про ваш досвід..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Надіслати відгук</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Футер -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <h4>Ресторан "Смачна кухня"</h4>
+                <p>Справжня українська кухня з європейським підходом. Ми готуємо з любов'ю!</p>
+            </div>
+
+            <div class="col-4">
+                <h4>Контакти</h4>
+                <p>📍 вул. Хрещатик, 1, Київ<br>
+                    📞 +38 (044) 123-45-67<br>
+                    ✉️ info@smachna-kuhnya.com.ua</p>
+            </div>
+
+            <div class="col-4">
+                <h4>Графік роботи</h4>
+                <p>Пн-Чт: 12:00 - 22:00<br>
+                    Пт-Сб: 12:00 - 23:00<br>
+                    Нд: 12:00 - 21:00</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom text-center mt-4">
+            <p>&copy; 2025 Ресторан "Смачна кухня". Всі права захищені.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Підключаємо JavaScript -->
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/client.js"></script>
+</body>
+</html>

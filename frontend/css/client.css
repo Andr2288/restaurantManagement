@@ -1,0 +1,653 @@
+/* css/client.css - Стилі для клієнтської частини */
+
+/* Стилі для героя */
+.hero {
+    height: 80vh;
+    background: linear-gradient(135deg,
+    rgba(212, 165, 116, 0.9) 0%,
+    rgba(44, 62, 80, 0.8) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="restaurant" patternUnits="userSpaceOnUse" width="100" height="100"><rect width="100" height="100" fill="%23f8f9fa"/><circle cx="50" cy="50" r="20" fill="%23d4a574" opacity="0.1"/></pattern></defs><rect width="1000" height="1000" fill="url(%23restaurant)"/></svg>');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Секції */
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: var(--gray-600);
+    margin-bottom: 3rem;
+}
+
+/* Стилі меню */
+.menu-section {
+    padding: 4rem 0;
+}
+
+.menu-filters {
+    margin-bottom: 2rem;
+}
+
+.menu-filters .btn {
+    margin: 0 5px 10px;
+    transition: var(--transition);
+}
+
+.menu-filters .btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.menu-item {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    transition: var(--transition);
+    border: 1px solid var(--gray-200);
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.menu-item-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--secondary-color);
+    margin: 0;
+    flex: 1;
+}
+
+.menu-item-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-left: 1rem;
+}
+
+.menu-item-category {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.menu-item-description {
+    color: var(--gray-600);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.menu-item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.menu-item-time {
+    color: var(--gray-500);
+    font-size: 0.9rem;
+}
+
+.menu-item-time::before {
+    content: '🕐 ';
+}
+
+.menu-item-available {
+    color: var(--success-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.menu-item-unavailable {
+    color: var(--danger-color);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Стилі резервації */
+.reservation-section {
+    padding: 4rem 0;
+}
+
+.reservation-info h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+.info-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 1.5rem;
+}
+
+.info-card h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.info-card ul {
+    padding-left: 1.2rem;
+}
+
+.info-card li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+/* Стилі відгуків */
+.feedback-section {
+    padding: 4rem 0;
+    background: var(--light-bg);
+}
+
+.feedback-list {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.feedback-item {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.feedback-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.feedback-author {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.feedback-date {
+    color: var(--gray-500);
+    font-size: 0.9rem;
+}
+
+.feedback-rating {
+    margin-bottom: 1rem;
+}
+
+.feedback-rating .stars {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
+
+.feedback-comments {
+    color: var(--gray-700);
+    line-height: 1.6;
+    font-style: italic;
+}
+
+/* Рейтинг зірок */
+.rating-stars {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.star {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    opacity: 0.3;
+}
+
+.star:hover,
+.star.active {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Статистика відгуків */
+.stats-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.stats-item:last-child {
+    border-bottom: none;
+}
+
+.stats-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stats-value {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.avg-rating {
+    text-align: center;
+    padding: 1rem;
+    background: var(--light-bg);
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+}
+
+.avg-rating-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.avg-rating-stars {
+    color: #ffc107;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+
+/* Футер */
+.footer {
+    background: var(--secondary-color);
+    color: white;
+    padding: 3rem 0 1rem;
+}
+
+.footer h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.footer p {
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    opacity: 0.7;
+}
+
+/* Анімації завантаження */
+.menu-loading, .feedback-loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray-500);
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Анімації появи */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Стилі для невалідних полів */
+.form-control.is-invalid {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .hero {
+        height: 60vh;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-buttons .btn {
+        width: 250px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .menu-item {
+        padding: 1rem;
+    }
+
+    .menu-filters {
+        text-align: left;
+    }
+
+    .menu-filters .btn {
+        margin: 5px 5px 5px 0;
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+    .reservation-info {
+        margin-top: 2rem;
+    }
+
+    .feedback-list {
+        max-height: none;
+    }
+
+    .feedback-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .menu-item-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .menu-item-price {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+
+    .info-card {
+        padding: 1rem;
+    }
+
+    .feedback-item {
+        padding: 1rem;
+    }
+
+    .rating-stars {
+        justify-content: center;
+    }
+}
+
+/* Стилі для скролбарів */
+.feedback-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.feedback-list::-webkit-scrollbar-track {
+    background: var(--gray-200);
+    border-radius: 3px;
+}
+
+.feedback-list::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.feedback-list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* Стилі для доступності */
+.star:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Плавні переходи при зміні контенту */
+.menu-container, .feedback-container {
+    transition: opacity 0.3s ease;
+}
+
+.menu-container.loading, .feedback-container.loading {
+    opacity: 0.6;
+}
+
+/* Стилі для пустого стану */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray-500);
+}
+
+.empty-state h3 {
+    color: var(--gray-600);
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+/* Стилі для успішних дій */
+.success-message {
+    background: var(--success-color);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/* Стилі для помилок */
+.error-message {
+    background: var(--danger-color);
+    color: white;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    margin: 1rem 0;
+}
+
+/* Hover ефекти для інтерактивних елементів */
+.menu-item-name:hover {
+    color: var(--primary-color);
+    cursor: default;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Стилі для індикатора завантаження в формах */
+.form-loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.form-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Стилі для мобільної навігації */
+@media (max-width: 768px) {
+    .navbar-nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: white;
+        box-shadow: var(--box-shadow);
+        flex-direction: column;
+        padding: 1rem;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
+
+    .navbar-nav.show {
+        transform: translateY(0);
+    }
+
+    .nav-item {
+        margin: 5px 0;
+        width: 100%;
+    }
+
+    .nav-link {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+    }
+}
+
+/* Стилі для кнопки мобільного меню */
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray-700);
+}
+
+@media (max-width: 768px) {
+    .navbar-toggle {
+        display: block;
+    }
+
+    .navbar-nav {
+        display: none;
+    }
+
+    .navbar-nav.show {
+        display: flex;
+    }
+}
