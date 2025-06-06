@@ -1,7 +1,7 @@
 <?php
 // src/Models/OrderDetail.php
 
-namespace Restaurant\Models;
+namespace Restaurant\models;
 
 class OrderDetail
 {

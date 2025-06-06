@@ -2,14 +2,30 @@
   "name": "restaurant/management",
   "description": "Restaurant Management System",
   "type": "project",
+  "version": "1.0.0",
   "require": {
     "php": ">=7.4",
     "ext-pdo": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-mbstring": "*"
   },
   "autoload": {
     "psr-4": {
       "Restaurant\\": "src/"
-    }
+    },
+    "files": [
+      "src/autoload.php"
+    ]
+  },
+  "config": {
+    "optimize-autoloader": true
+  },
+  "scripts": {
+    "setup": [
+      "php setup.php"
+    ],
+    "test-db": [
+      "php -r \"require 'config/db.php'; (new Database())->testConnection();\""
+    ]
   }
 }

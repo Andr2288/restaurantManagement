@@ -1,20 +1,18 @@
 <?php
-// src/Models/MenuItem.php
+// src/Models/Table.php
 
-namespace Restaurant\Models;
+namespace Restaurant\models;
 
-class MenuItem
+class Table
 {
     private $conn;
-    private $table = 'menu_items';
+    private $table = 'tables';
 
     // Властивості об'єкта
     public $id;
-    public $name;
-    public $category;
-    public $description;
-    public $price;
-    public $cooking_time;
+    public $table_number;
+    public $capacity;
+    public $location;
     public $is_available;
     public $created_at;
 
@@ -27,11 +25,11 @@ class MenuItem
     }
 
     /**
-     * Отримати всі страви меню
+     * Отримати всі столики
      */
     public function getAll()
     {
-        $query = "SELECT * FROM {$this->table} ORDER BY category, name";
+        $query = "SELECT * FROM {$this->table} ORDER BY table_number";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -39,24 +37,11 @@ class MenuItem
     }
 
     /**
-     * Отримати страви за категорією
-     */
-    public function getByCategory($category)
-    {
-        $query = "SELECT * FROM {$this->table} WHERE category = :category ORDER BY name";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':category', $category);
-        $stmt->execute();
-
-        return $stmt;
-    }
-
-    /**
-     * Отримати доступні страви
+     * Отримати доступні столики
      */
     public function getAvailable()
     {
-        $query = "SELECT * FROM {$this->table} WHERE is_available = 1 ORDER BY category, name";
+        $query = "SELECT * FROM {$this->table} WHERE is_available = 1 ORDER BY table_number";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
 
@@ -64,7 +49,7 @@ class MenuItem
     }
 
     /**
-     * Отримати одну страву
+     * Отримати один столик
      */
     public function getOne()
     {
@@ -76,11 +61,9 @@ class MenuItem
         $row = $stmt->fetch();
 
         if ($row) {
-            $this->name = $row['name'];
-            $this->category = $row['category'];
-            $this->description = $row['description'];
-            $this->price = $row['price'];
-            $this->cooking_time = $row['cooking_time'];
+            $this->table_number = $row['table_number'];
+            $this->capacity = $row['capacity'];
+            $this->location = $row['location'];
             $this->is_available = $row['is_available'];
             $this->created_at = $row['created_at'];
             return true;
@@ -90,28 +73,26 @@ class MenuItem
     }
 
     /**
-     * Створити нову страву
+     * Створити новий столик
      */
     public function create()
     {
         $query = "INSERT INTO {$this->table} 
-                (name, category, description, price, cooking_time, is_available) 
+                (table_number, capacity, location, is_available) 
                 VALUES 
-                (:name, :category, :description, :price, :cooking_time, :is_available)";
+                (:table_number, :capacity, :location, :is_available)";
 
         $stmt = $this->conn->prepare($query);
 
         // Очистка даних
-        $this->name = htmlspecialchars(strip_tags($this->name));
-        $this->category = htmlspecialchars(strip_tags($this->category));
-        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->table_number = htmlspecialchars(strip_tags($this->table_number));
+        $this->capacity = htmlspecialchars(strip_tags($this->capacity));
+        $this->location = htmlspecialchars(strip_tags($this->location));
 
         // Прив'язка параметрів
-        $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':category', $this->category);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':price', $this->price);
-        $stmt->bindParam(':cooking_time', $this->cooking_time);
+        $stmt->bindParam(':table_number', $this->table_number);
+        $stmt->bindParam(':capacity', $this->capacity);
+        $stmt->bindParam(':location', $this->location);
         $stmt->bindParam(':is_available', $this->is_available);
 
         // Виконання запиту
@@ -124,33 +105,29 @@ class MenuItem
     }
 
     /**
-     * Оновити страву
+     * Оновити дані столика
      */
     public function update()
     {
         $query = "UPDATE {$this->table} SET
-                name = :name,
-                category = :category,
-                description = :description,
-                price = :price,
-                cooking_time = :cooking_time,
+                table_number = :table_number,
+                capacity = :capacity,
+                location = :location,
                 is_available = :is_available
                 WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
         // Очистка даних
-        $this->name = htmlspecialchars(strip_tags($this->name));
-        $this->category = htmlspecialchars(strip_tags($this->category));
-        $this->description = htmlspecialchars(strip_tags($this->description));
+        $this->table_number = htmlspecialchars(strip_tags($this->table_number));
+        $this->capacity = htmlspecialchars(strip_tags($this->capacity));
+        $this->location = htmlspecialchars(strip_tags($this->location));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
         // Прив'язка параметрів
-        $stmt->bindParam(':name', $this->name);
-        $stmt->bindParam(':category', $this->category);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':price', $this->price);
-        $stmt->bindParam(':cooking_time', $this->cooking_time);
+        $stmt->bindParam(':table_number', $this->table_number);
+        $stmt->bindParam(':capacity', $this->capacity);
+        $stmt->bindParam(':location', $this->location);
         $stmt->bindParam(':is_available', $this->is_available);
         $stmt->bindParam(':id', $this->id);
 
@@ -163,7 +140,7 @@ class MenuItem
     }
 
     /**
-     * Видалити страву
+     * Видалити столик
      */
     public function delete()
     {

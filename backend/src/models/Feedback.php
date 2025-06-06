@@ -1,7 +1,7 @@
 <?php
 // src/Models/Feedback.php
 
-namespace Restaurant\Models;
+namespace Restaurant\models;
 
 class Feedback
 {

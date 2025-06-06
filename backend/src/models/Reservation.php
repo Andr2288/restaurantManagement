@@ -1,7 +1,7 @@
 <?php
 // src/Models/Reservation.php
 
-namespace Restaurant\Models;
+namespace Restaurant\models;
 
 class Reservation
 {

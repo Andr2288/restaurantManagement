@@ -1,5 +1,6 @@
 <?php
 // config/db.php
+// Виправлена конфігурація бази даних
 
 // Завантаження змінних середовища
 $envFile = __DIR__ . '/../.env';
@@ -9,9 +10,11 @@ if (file_exists($envFile)) {
         if (strpos($line, '#') === 0) {
             continue;
         }
-        list($name, $value) = explode('=', $line, 2);
-        $_ENV[trim($name)] = trim($value);
-        putenv(sprintf('%s=%s', trim($name), trim($value)));
+        if (strpos($line, '=') !== false) {
+            list($name, $value) = explode('=', $line, 2);
+            $_ENV[trim($name)] = trim($value);
+            putenv(sprintf('%s=%s', trim($name), trim($value)));
+        }
     }
 }
 
@@ -30,56 +33,68 @@ class Database
      * Конструктор класу
      */
     public function __construct()
-{
-    $this->host = getenv('DB_HOST') ?: 'localhost';
-    $this->user = getenv('DB_USER') ?: 'root';
-    $this->password = getenv('DB_PASSWORD') ?: '';
-    $this->dbname = getenv('DB_NAME') ?: 'restaurant_management_db';
-}
+    {
+        $this->host = getenv('DB_HOST') ?: 'localhost';
+        $this->user = getenv('DB_USER') ?: 'root';
+        $this->password = getenv('DB_PASSWORD') ?: '';
+        $this->dbname = getenv('DB_NAME') ?: 'restaurant_management_db';
+    }
 
     /**
      * Підключення до бази даних
      */
     public function connect()
-{
-    try {
-        $this->conn = new PDO(
-            "mysql:host={$this->host};dbname={$this->dbname};charset=utf8mb4",
-            $this->user,
-            $this->password,
-            [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES => false
-    ]
-    );
-        return $this->conn;
-    } catch (PDOException $e) {
-    echo "❌ Помилка підключення: " . $e->getMessage();
-    exit;
-}
-}
+    {
+        if ($this->conn !== null) {
+            return $this->conn;
+        }
+
+        try {
+            $this->conn = new PDO(
+                "mysql:host={$this->host};dbname={$this->dbname};charset=utf8mb4",
+                $this->user,
+                $this->password,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES => false
+                ]
+            );
+            return $this->conn;
+        } catch (PDOException $e) {
+            error_log("Database connection error: " . $e->getMessage());
+            throw new Exception("Помилка підключення до бази даних");
+        }
+    }
 
     /**
      * Тест підключення до бази даних
      */
     public function testConnection()
-{
-    try {
-        $this->connect();
-        echo "✅ Підключення до БД успішне\n";
-        return true;
-    } catch (Exception $e) {
-    echo "❌ Помилка підключення: " . $e->getMessage() . "\n";
-    return false;
-}
-}
+    {
+        try {
+            $this->connect();
+            echo "✅ Підключення до БД успішне\n";
+            return true;
+        } catch (Exception $e) {
+            echo "❌ Помилка підключення: " . $e->getMessage() . "\n";
+            return false;
+        }
+    }
 
     /**
      * Отримання з'єднання з базою даних
      */
     public function getConnection()
-{
-    return $this->conn ?: $this->connect();
-}
+    {
+        return $this->connect();
+    }
+
+    /**
+     * Закриття з'єднання
+     */
+    public function close()
+    {
+        $this->conn = null;
+    }
 }

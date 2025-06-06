@@ -1,7 +1,7 @@
 <?php
 // src/Models/Employee.php
 
-namespace Restaurant\Models;
+namespace Restaurant\models;
 
 class Employee
 {
