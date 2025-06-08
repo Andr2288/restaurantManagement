@@ -280,22 +280,4 @@ class Reservation
         list($hours, $minutes, $seconds) = explode(':', $time);
         return $hours * 60 + $minutes;
     }
-
-    public function getByDate($date)
-    {
-        $query = "SELECT
-                  r.*,
-                  t.table_number,
-                  t.capacity
-                  FROM {$this->table} r
-                  LEFT JOIN tables t ON r.table_id = t.id
-                  WHERE r.reservation_date = :reservation_date
-                  ORDER BY r.reservation_time";
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':reservation_date', $date);
-        $stmt->execute();
-
-        return $stmt;
-    }
 }

@@ -229,19 +229,4 @@ class Feedback
 
         return $stmt->fetch();
     }
-
-    public function togglePublished()
-    {
-        $query = "UPDATE {$this->table} SET is_published = NOT is_published WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $this->id);
-
-        if ($stmt->execute()) {
-            // Оновлюємо значення властивості
-            $this->is_published = !$this->is_published;
-            return true;
-        }
-
-        return false;
-    }
 }
