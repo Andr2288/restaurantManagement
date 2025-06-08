@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель адміністратора - Смачна кухня</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<!-- Екран входу -->
+<div id="login-screen" class="login-screen">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🔐 Вхід для адміністратора</h1>
+                <p>Панель управління ресторану "Смачна кухня"</p>
+            </div>
+
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="username">Логін</label>
+                    <input type="text" class="form-control" id="username" name="username"
+                           placeholder="Введіть логін" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Пароль</label>
+                    <input type="password" class="form-control" id="password" name="password"
+                           placeholder="Введіть пароль" required autocomplete="current-password">
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="remember" id="remember">
+                        Запам'ятати мене
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Увійти</button>
+            </form>
+
+            <div class="login-help">
+                <p><strong>Тестові дані для входу:</strong></p>
+                <p>Логін: <code>admin</code></p>
+                <p>Пароль: <code>restaurant123</code></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Головна панель адміністратора -->
+<div id="admin-panel" class="admin-panel" style="display: none;">
+    <!-- Навігація адміністратора -->
+    <nav class="admin-navbar">
+        <div class="admin-nav-container">
+            <div class="admin-brand">
+                <span class="admin-icon">🍽️</span>
+                <span class="admin-title">Адмін панель</span>
+            </div>
+
+            <div class="admin-nav-center">
+                <div class="admin-tabs">
+                    <button class="admin-tab active" data-tab="dashboard">📊 Дашборд</button>
+                    <button class="admin-tab" data-tab="reservations">📅 Резервації</button>
+                    <button class="admin-tab" data-tab="orders">🍽️ Замовлення</button>
+                    <button class="admin-tab" data-tab="menu">📋 Меню</button>
+                    <button class="admin-tab" data-tab="tables">🪑 Столики</button>
+                    <button class="admin-tab" data-tab="employees">👥 Співробітники</button>
+                    <button class="admin-tab" data-tab="feedback">💬 Відгуки</button>
+                </div>
+            </div>
+
+            <div class="admin-user-menu">
+                <span class="admin-username">Адміністратор</span>
+                <button class="btn btn-outline btn-sm" id="logout-btn">Вийти</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Контент панелі -->
+    <main class="admin-content">
+        <!-- Дашборд -->
+        <section id="dashboard-tab" class="admin-tab-content active">
+            <div class="admin-container">
+                <h2 class="admin-page-title">📊 Дашборд</h2>
+
+                <!-- Статистичні картки -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-content">
+                            <div class="stat-title">Резервації сьогодні</div>
+                            <div class="stat-value" id="today-reservations-count">0</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🍽️</div>
+                        <div class="stat-content">
+                            <div class="stat-title">Активні замовлення</div>
+                            <div class="stat-value" id="active-orders-count">0</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-content">
+                            <div class="stat-title">Дохід за сьогодні</div>
+                            <div class="stat-value" id="today-revenue">0 ₴</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-content">
+                            <div class="stat-title">Середня оцінка</div>
+                            <div class="stat-value" id="avg-rating">0.0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Швидкі дії -->
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🚀 Швидкі дії</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="quick-actions">
+                                    <button class="btn btn-primary" onclick="adminSystem.switchTab('reservations')">
+                                        📅 Нова резервація
+                                    </button>
+                                    <button class="btn btn-success" onclick="adminSystem.switchTab('orders')">
+                                        🍽️ Нове замовлення
+                                    </button>
+                                    <button class="btn btn-warning" onclick="adminSystem.switchTab('menu')">
+                                        📋 Додати страву
+                                    </button>
+                                    <button class="btn btn-info" onclick="adminSystem.switchTab('tables')">
+                                        🪑 Управління столиками
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>📈 Активність сьогодні</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="today-activity" class="activity-list">
+                                    <!-- Активність буде завантажена динамічно -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Резервації -->
+        <section id="reservations-tab" class="admin-tab-content">
+            <div class="admin-container">
+                <div class="admin-page-header">
+                    <h2 class="admin-page-title">📅 Управління резерваціями</h2>
+                    <button class="btn btn-primary" onclick="adminSystem.showCreateReservationModal()">
+                        + Нова резервація
+                    </button>
+                </div>
+
+                <!-- Фільтри -->
+                <div class="admin-filters">
+                    <div class="filter-group">
+                        <label>Дата:</label>
+                        <input type="date" id="reservations-date-filter" class="form-control">
+                    </div>
+                    <div class="filter-group">
+                        <label>Статус:</label>
+                        <select id="reservations-status-filter" class="form-control">
+                            <option value="">Всі статуси</option>
+                            <option value="Підтверджено">Підтверджено</option>
+                            <option value="Прибули">Прибули</option>
+                            <option value="Не з'явились">Не з'явились</option>
+                            <option value="Скасовано">Скасовано</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Пошук:</label>
+                        <input type="text" id="reservations-search" class="form-control" placeholder="Ім'я або телефон">
+                    </div>
+                </div>
+
+                <!-- Таблиця резервацій -->
+                <div class="table-responsive">
+                    <table class="table" id="reservations-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Дата/Час</th>
+                            <th>Клієнт</th>
+                            <th>Телефон</th>
+                            <th>Столик</th>
+                            <th>Гостей</th>
+                            <th>Статус</th>
+                            <th>Дії</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Дані будуть завантажені динамічно -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Замовлення -->
+        <section id="orders-tab" class="admin-tab-content">
+            <div class="admin-container">
+                <div class="admin-page-header">
+                    <h2 class="admin-page-title">🍽️ Управління замовленнями</h2>
+                    <button class="btn btn-primary" onclick="adminSystem.showCreateOrderModal()">
+                        + Нове замовлення
+                    </button>
+                </div>
+
+                <!-- Фільтри замовлень -->
+                <div class="admin-filters">
+                    <div class="filter-group">
+                        <label>Дата:</label>
+                        <input type="date" id="orders-date-filter" class="form-control">
+                    </div>
+                    <div class="filter-group">
+                        <label>Статус:</label>
+                        <select id="orders-status-filter" class="form-control">
+                            <option value="">Всі статуси</option>
+                            <option value="Нове">Нове</option>
+                            <option value="Готується">Готується</option>
+                            <option value="Готове">Готове</option>
+                            <option value="Подано">Подано</option>
+                            <option value="Оплачено">Оплачено</option>
+                            <option value="Скасовано">Скасовано</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Таблиця замовлень -->
+                <div class="table-responsive">
+                    <table class="table" id="orders-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Дата/Час</th>
+                            <th>Столик</th>
+                            <th>Співробітник</th>
+                            <th>Сума</th>
+                            <th>Статус</th>
+                            <th>Дії</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Дані будуть завантажені динамічно -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Меню -->
+        <section id="menu-tab" class="admin-tab-content">
+            <div class="admin-container">
+                <div class="admin-page-header">
+                    <h2 class="admin-page-title">📋 Управління меню</h2>
+                    <button class="btn btn-primary" onclick="adminSystem.showCreateMenuItemModal()">
+                        + Додати страву
+                    </button>
+                </div>
+
+                <!-- Фільтри меню -->
+                <div class="admin-filters">
+                    <div class="filter-group">
+                        <label>Категорія:</label>
+                        <select id="menu-category-filter" class="form-control">
+                            <option value="">Всі категорії</option>
+                            <option value="Салати">Салати</option>
+                            <option value="Супи">Супи</option>
+                            <option value="Основні страви">Основні страви</option>
+                            <option value="Гарніри">Гарніри</option>
+                            <option value="Десерти">Десерти</option>
+                            <option value="Напої">Напої</option>
+                            <option value="Алкоголь">Алкоголь</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Доступність:</label>
+                        <select id="menu-availability-filter" class="form-control">
+                            <option value="">Всі страви</option>
+                            <option value="1">Доступні</option>
+                            <option value="0">Недоступні</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Пошук:</label>
+                        <input type="text" id="menu-search" class="form-control" placeholder="Назва страви">
+                    </div>
+                </div>
+
+                <!-- Таблиця меню -->
+                <div class="table-responsive">
+                    <table class="table" id="menu-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Назва</th>
+                            <th>Категорія</th>
+                            <th>Ціна</th>
+                            <th>Час приготування</th>
+                            <th>Доступність</th>
+                            <th>Дії</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Дані будуть завантажені динамічно -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Столики -->
+        <section id="tables-tab" class="admin-tab-content">
+            <div class="admin-container">
+                <div class="admin-page-header">
+                    <h2 class="admin-page-title">🪑 Управління столиками</h2>
+                    <button class="btn btn-primary" onclick="adminSystem.showCreateTableModal()">
+                        + Додати столик
+                    </button>
+                </div>
+
+                <!-- Таблиця столиків -->
+                <div class="table-responsive">
+                    <table class="table" id="tables-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Номер столика</th>
+                            <th>Місткість</th>
+                            <th>Розташування</th>
+                            <th>Доступність</th>
+                            <th>Дії</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Дані будуть завантажені динамічно -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Співробітники -->
+        <section id="employees-tab" class="admin-tab-content">
+            <div class="admin-container">
+                <div class="admin-page-header">
+                    <h2 class="admin-page-title">👥 Управління співробітниками</h2>
+                    <button class="btn btn-primary" onclick="adminSystem.showCreateEmployeeModal()">
+                        + Додати співробітника
+                    </button>
+                </div>
+
+                <!-- Таблиця співробітників -->
+                <div class="table-responsive">
+                    <table class="table" id="employees-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ім'я</th>
+                            <th>Посада</th>
+                            <th>Телефон</th>
+                            <th>Email</th>
+                            <th>Зарплата</th>
+                            <th>Статус</th>
+                            <th>Дії</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Дані будуть завантажені динамічно -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Відгуки -->
+        <section id="feedback-tab" class="admin-tab-content">
+            <div class="admin-container">
+                <div class="admin-page-header">
+                    <h2 class="admin-page-title">💬 Управління відгуками</h2>
+                    <div class="admin-actions">
+                        <button class="btn btn-success" onclick="adminSystem.publishAllFeedback()">
+                            Опублікувати всі
+                        </button>
+                        <button class="btn btn-secondary" onclick="adminSystem.exportFeedback()">
+                            Експорт CSV
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Фільтри відгуків -->
+                <div class="admin-filters">
+                    <div class="filter-group">
+                        <label>Рейтинг:</label>
+                        <select id="feedback-rating-filter" class="form-control">
+                            <option value="">Всі рейтинги</option>
+                            <option value="5">⭐⭐⭐⭐⭐</option>
+                            <option value="4">⭐⭐⭐⭐</option>
+                            <option value="3">⭐⭐⭐</option>
+                            <option value="2">⭐⭐</option>
+                            <option value="1">⭐</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Публікація:</label>
+                        <select id="feedback-published-filter" class="form-control">
+                            <option value="">Всі відгуки</option>
+                            <option value="1">Опубліковані</option>
+                            <option value="0">Не опубліковані</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Таблиця відгуків -->
+                <div class="table-responsive">
+                    <table class="table" id="feedback-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Клієнт</th>
+                            <th>Рейтинг</th>
+                            <th>Коментар</th>
+                            <th>Дата</th>
+                            <th>Опубліковано</th>
+                            <th>Дії</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Дані будуть завантажені динамічно -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Модальні вікна будуть додані динамічно через JavaScript -->
+
+<!-- Підключаємо JavaScript -->
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
