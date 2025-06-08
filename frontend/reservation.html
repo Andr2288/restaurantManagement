@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розширена резервація - Смачна кухня</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/client.css">
+    <link rel="stylesheet" href="css/reservation.css">
+</head>
+<body>
+<!-- Навігація -->
+<nav class="navbar">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="index.html" class="navbar-brand">🍽️ Смачна кухня</a>
+            <div class="navbar-nav d-flex">
+                <a href="index.html" class="nav-link">Головна</a>
+                <a href="index.html#menu" class="nav-link">Меню</a>
+                <a href="#" class="nav-link active">Резервація</a>
+                <a href="index.html#feedback" class="nav-link">Відгуки</a>
+                <a href="admin.html" class="nav-link">Адмін</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Головна секція резервації -->
+<section class="reservation-advanced">
+    <div class="container">
+        <h1 class="section-title text-center">Розширена резервація столика</h1>
+        <p class="section-subtitle text-center">Оберіть зручний день, час та столик за нашою інтерактивною схемою</p>
+
+        <div class="row">
+            <!-- Календар -->
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📅 Оберіть дату</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="calendar-wrapper">
+                            <div class="calendar-header">
+                                <button type="button" class="btn btn-outline" id="prev-month">‹</button>
+                                <h4 id="current-month-year">Червень 2025</h4>
+                                <button type="button" class="btn btn-outline" id="next-month">›</button>
+                            </div>
+                            <div class="calendar-grid" id="calendar-grid">
+                                <!-- Календар буде згенерований JS -->
+                            </div>
+                        </div>
+
+                        <!-- Часові слоти -->
+                        <div class="time-slots-section" id="time-slots-section" style="display: none;">
+                            <h4>🕐 Оберіть час</h4>
+                            <p class="text-muted">Оберіть час для резервації на <span id="selected-date-display">-</span></p>
+                            <div class="time-slots" id="time-slots">
+                                <!-- Часові слоти будуть згенеровані JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Сьогоднішні резервації -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h3>📋 Резервації на сьогодні</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="today-reservations">
+                            <!-- Список резервацій буде згенерований JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Схема ресторану -->
+            <div class="col-6">
+                <div class="card" id="table-layout-card" style="display: none;">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3>🏪 Схема ресторану</h3>
+                        <div class="table-legend">
+                            <div class="legend-item">
+                                <div class="legend-color available"></div>
+                                <span>Доступний</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color occupied"></div>
+                                <span>Зайнятий</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color selected"></div>
+                                <span>Обраний</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="restaurant-layout" id="restaurant-layout">
+                            <!-- Схема столиків буде згенерована JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Деталі бронювання -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h3>📝 Деталі бронювання</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Сводка резервації -->
+                        <div class="reservation-summary" id="reservation-summary" style="display: none;">
+                            <h4>📋 Ваша резервація:</h4>
+                            <div class="summary-item">
+                                <strong>Дата:</strong> <span id="summary-date">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <strong>Час:</strong> <span id="summary-time">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <strong>Столик:</strong> <span id="summary-table">-</span>
+                            </div>
+                            <div class="summary-item">
+                                <strong>Місткість:</strong> <span id="summary-capacity">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Форма бронювання -->
+                        <form id="advanced-reservation-form">
+                            <!-- Приховані поля -->
+                            <input type="hidden" id="selected_date" name="reservation_date">
+                            <input type="hidden" id="selected_time" name="reservation_time">
+                            <input type="hidden" id="selected_table" name="table_id">
+
+                            <div class="form-group">
+                                <label class="form-label" for="adv_customer_name">Ваше ім'я *</label>
+                                <input type="text" class="form-control" id="adv_customer_name"
+                                       name="customer_name" required placeholder="Введіть ваше ім'я">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="adv_customer_phone">Номер телефону *</label>
+                                <input type="tel" class="form-control" id="adv_customer_phone"
+                                       name="customer_phone" required placeholder="+380501234567">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="adv_guests">Кількість гостей *</label>
+                                <div class="guests-selector">
+                                    <button type="button" class="btn btn-outline" id="guests-minus">-</button>
+                                    <input type="number" class="form-control guests-input"
+                                           id="adv_guests" name="number_of_guests"
+                                           value="2" min="1" max="8" readonly>
+                                    <button type="button" class="btn btn-outline" id="guests-plus">+</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Додаткові послуги</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="birthday_celebration">
+                                        🎂 Святкування дня народження
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="romantic_dinner">
+                                        💕 Романтична вечеря
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="business_meeting">
+                                        💼 Ділова зустріч
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="child_menu">
+                                        👶 Дитяче меню
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" name="wine_pairing">
+                                        🍷 Винна карта сомельє
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="adv_notes">Додаткові побажання</label>
+                                <textarea class="form-control" id="adv_notes" name="notes"
+                                          rows="3" placeholder="Спеціальні вимоги, алергії, інші побажання..."></textarea>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg" id="reserve-btn" disabled>
+                                    Оберіть дату, час та столик
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Інформаційна секція -->
+        <div class="row mt-5">
+            <div class="col-4">
+                <div class="info-card">
+                    <h4>ℹ️ Про резервацію</h4>
+                    <div class="info-item">
+                        <strong>Тривалість резервації:</strong>
+                        <p>2 години з моменту прибуття</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Підтвердження:</strong>
+                        <p>Ми зв'яжемося з вами протягом 30 хвилин</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Скасування:</strong>
+                        <p>Можливе за 2 години до візиту</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="info-card">
+                    <h4>🕐 Робочі години</h4>
+                    <div class="info-item">
+                        <strong>Понеділок - Четвер:</strong>
+                        <p>12:00 - 22:00</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>П'ятниця - Субота:</strong>
+                        <p>12:00 - 23:00</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Неділя:</strong>
+                        <p>12:00 - 21:00</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="info-card">
+                    <h4>📞 Контакти</h4>
+                    <div class="info-item">
+                        <strong>Телефон:</strong>
+                        <p>+38 (044) 123-45-67</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Email:</strong>
+                        <p>info@smachna-kuhnya.com.ua</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>Адреса:</strong>
+                        <p>вул. Хрещатик, 1, Київ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Модальне вікно підтвердження -->
+<div class="modal" id="confirmation-modal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">✅ Резервацію створено!</h3>
+            <button type="button" class="modal-close" onclick="hideModal('confirmation-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="confirmation-details" id="confirmation-details">
+                <!-- Деталі підтвердження будуть додані JS -->
+            </div>
+            <div class="text-center mt-3">
+                <p class="text-success">
+                    <strong>Дякуємо! Ми зв'яжемося з вами найближчим часом для підтвердження.</strong>
+                </p>
+                <p class="text-muted">
+                    Якщо у вас є термінові питання, телефонуйте: <strong>+38 (044) 123-45-67</strong>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="hideModal('confirmation-modal')">
+                Закрити
+            </button>
+            <a href="index.html" class="btn btn-primary">На головну</a>
+        </div>
+    </div>
+</div>
+
+<!-- Підключаємо JavaScript -->
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/calendar.js"></script>
+<script src="js/advanced-reservation.js"></script>
+</body>
+</html>

@@ -308,4 +308,23 @@ class Order
 
         return false;
     }
+
+    public function getByDate($date)
+    {
+        $query = "SELECT
+                  o.*,
+                  t.table_number,
+                  CONCAT(e.first_name, ' ', e.last_name) as employee_name
+                  FROM {$this->table} o
+                  LEFT JOIN tables t ON o.table_id = t.id
+                  LEFT JOIN employees e ON o.employee_id = e.id
+                  WHERE o.order_date = :order_date
+                  ORDER BY o.order_time DESC";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':order_date', $date);
+        $stmt->execute();
+
+        return $stmt;
+    }
 }
