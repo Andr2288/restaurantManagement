@@ -1,117 +1,54 @@
 /* css/client.css - Стилі для клієнтської частини */
 
+/* Стилі для героя */
 .hero {
     height: 80vh;
     background: linear-gradient(135deg,
-    rgba(212, 165, 116, 0.7) 0%,
-    rgba(248, 235, 218, 0.8) 50%,
-    rgba(255, 255, 255, 0.9) 100%),
-    linear-gradient(45deg,
-            rgba(212, 165, 116, 0.1) 0%,
-            rgba(44, 62, 80, 0.2) 100%);
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    #ffffff 0%,
+    #f8f9fa 25%,
+    rgba(212, 165, 116, 0.3) 75%,
+    rgba(212, 165, 116, 0.5) 100%);
     display: flex;
     align-items: center;
     position: relative;
 }
 
-/* Замініть .hero-overlay на це: */
 .hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(212, 165, 116, 0.15) 50%,
-    rgba(248, 249, 250, 0.2) 100%);
+    background: transparent;
     display: flex;
     align-items: center;
 }
 
-/* Оновлений стиль для контенту */
 .hero-content {
-    color: var(--secondary-color); /* Темно-синій замість білого */
-    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8); /* Білий текстовий тінь */
-    position: relative;
-    z-index: 2;
+    color: var(--secondary-color);
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
 }
 
-/* Оновлений заголовок */
 .hero-title {
     font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
     line-height: 1.2;
     color: var(--secondary-color);
-    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);
 }
 
-/* Підзаголовок */
 .hero-subtitle {
     font-size: 1.5rem;
     margin-bottom: 2rem;
     opacity: 0.9;
     color: var(--gray-700);
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
 }
 
-/* Альтернативний варіант з більш яскравим фоном */
-.hero-alternative {
-    height: 80vh;
-    background: linear-gradient(135deg,
-    #f8f9fa 0%,
-    #e9ecef 25%,
-    #d4a574 75%,
-    #b8956a 100%);
+.hero-buttons {
     display: flex;
-    align-items: center;
-    position: relative;
-}
-
-/* Або третій варіант з паттерном */
-.hero-pattern {
-    height: 80vh;
-    background:
-            radial-gradient(circle at 25% 25%, rgba(212, 165, 116, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 75% 75%, rgba(44, 62, 80, 0.1) 0%, transparent 50%),
-            linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
-    display: flex;
-    align-items: center;
-    position: relative;
-}
-
-/* Додатковий стиль для кнопок на світлому фоні */
-.hero .btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-    border: 2px solid var(--primary-color);
-    box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
-}
-
-.hero .btn-outline {
-    background-color: transparent;
-    border: 2px solid var(--secondary-color);
-    color: var(--secondary-color);
-}
-
-.hero .btn-outline:hover {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
-/* Покращена анімація для кнопок */
-.hero .btn {
-    transition: all 0.3s ease;
-    font-weight: 600;
-}
-
-.hero .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 /* Секції */
@@ -252,11 +189,17 @@
 /* Стилі резервації */
 .reservation-section {
     padding: 4rem 0;
+    background: var(--light-bg);
+}
+
+.reservation-info {
+    /* Не потрібен margin-top, оскільки колонки поруч */
 }
 
 .reservation-info h3 {
     color: var(--secondary-color);
     margin-bottom: 1.5rem;
+    font-size: 1.5rem;
 }
 
 .info-card {
@@ -265,27 +208,45 @@
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary-color);
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
 }
 
 .info-card h4 {
     color: var(--primary-color);
     margin-bottom: 1rem;
     font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .info-card ul {
     padding-left: 1.2rem;
+    margin: 0;
 }
 
 .info-card li {
     margin-bottom: 0.5rem;
     line-height: 1.5;
+    color: var(--gray-700);
+}
+
+.info-card p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--gray-700);
 }
 
 /* Стилі відгуків */
 .feedback-section {
     padding: 4rem 0;
-    background: var(--light-bg);
+    background: white;
 }
 
 .feedback-list {
@@ -300,6 +261,13 @@
     box-shadow: var(--box-shadow);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
+    border-left: 4px solid var(--primary-color);
+}
+
+.feedback-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
 }
 
 .feedback-header {
@@ -312,6 +280,7 @@
 .feedback-author {
     font-weight: 600;
     color: var(--secondary-color);
+    font-size: 1.1rem;
 }
 
 .feedback-date {
@@ -332,6 +301,7 @@
     color: var(--gray-700);
     line-height: 1.6;
     font-style: italic;
+    font-size: 1rem;
 }
 
 /* Рейтинг зірок */
@@ -339,6 +309,7 @@
     display: flex;
     gap: 5px;
     margin-bottom: 10px;
+    justify-content: center;
 }
 
 .star {
@@ -380,14 +351,14 @@
 
 .avg-rating {
     text-align: center;
-    padding: 1rem;
+    padding: 1.5rem;
     background: var(--light-bg);
     border-radius: var(--border-radius);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .avg-rating-value {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: var(--primary-color);
 }
@@ -418,6 +389,7 @@
 .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 1rem;
+    margin-top: 2rem;
     opacity: 0.7;
 }
 
@@ -514,6 +486,12 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
+    }
+
+    /* На мобільних колонки стають вертикальними */
+    .col-6, .col-4, .col-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
     }
 }
 
@@ -629,33 +607,6 @@
 .menu-item-name:hover {
     color: var(--primary-color);
     cursor: default;
-}
-
-.info-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Стилі для індикатора завантаження в формах */
-.form-loading {
-    position: relative;
-    overflow: hidden;
-}
-
-.form-loading::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    animation: shimmer 1.5s infinite;
-}
-
-@keyframes shimmer {
-    0% { left: -100%; }
-    100% { left: 100%; }
 }
 
 /* Стилі для мобільної навігації */

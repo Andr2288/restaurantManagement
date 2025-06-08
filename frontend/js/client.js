@@ -1,4 +1,4 @@
-// js/client.js - Логіка для клієнтської частини
+
 
 /**
  * Головний клас для управління клієнтською частиною
@@ -24,7 +24,7 @@ class RestaurantClient {
      * Налаштування обробників подій
      */
     setupEventListeners() {
-        // Фільтри меню
+        
         const menuFilters = document.querySelectorAll('.menu-filters .btn');
         menuFilters.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -33,7 +33,7 @@ class RestaurantClient {
             });
         });
 
-        // Форма резервації
+        
         const reservationForm = document.getElementById('reservation-form');
         if (reservationForm) {
             reservationForm.addEventListener('submit', (e) => {
@@ -41,7 +41,7 @@ class RestaurantClient {
                 this.handleReservationSubmit();
             });
 
-            // Динамічне оновлення доступних столиків
+            
             const dateInput = document.getElementById('reservation_date');
             const timeInput = document.getElementById('reservation_time');
             const guestsInput = document.getElementById('number_of_guests');
@@ -55,7 +55,7 @@ class RestaurantClient {
             });
         }
 
-        // Рейтинг зірок
+        
         const stars = document.querySelectorAll('.rating-stars .star');
         stars.forEach(star => {
             star.addEventListener('click', (e) => {
@@ -74,7 +74,7 @@ class RestaurantClient {
             });
         }
 
-        // Форма відгуку
+        
         const feedbackForm = document.getElementById('feedback-form');
         if (feedbackForm) {
             feedbackForm.addEventListener('submit', (e) => {
@@ -83,7 +83,7 @@ class RestaurantClient {
             });
         }
 
-        // Мобільне меню
+        
         this.setupMobileMenu();
     }
 
@@ -111,12 +111,12 @@ class RestaurantClient {
     setupDateRestrictions() {
         const dateInput = document.getElementById('reservation_date');
         if (dateInput) {
-            // Мінімальна дата - завтра
+            
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
             dateInput.min = tomorrow.toISOString().split('T')[0];
 
-            // Максимальна дата - через 3 місяці
+            
             const maxDate = new Date();
             maxDate.setMonth(maxDate.getMonth() + 3);
             dateInput.max = maxDate.toISOString().split('T')[0];
@@ -130,16 +130,16 @@ class RestaurantClient {
         try {
             showLoading();
 
-            // Завантажуємо меню
+            
             await this.loadMenu();
 
-            // Завантажуємо столики
+            
             await this.loadTables();
 
-            // Завантажуємо відгуки
+            
             await this.loadFeedback();
 
-            // Завантажуємо статистику
+            
             await this.loadFeedbackStats();
 
             hideLoading();
@@ -270,7 +270,7 @@ class RestaurantClient {
         const select = document.getElementById('table_id');
         if (!select) return;
 
-        // Очищуємо попередні опції (крім першої)
+        
         while (select.children.length > 1) {
             select.removeChild(select.lastChild);
         }
@@ -287,9 +287,9 @@ class RestaurantClient {
      * Оновлення доступних столиків
      */
     async updateAvailableTables() {
-        const date = document.getElementById('reservation_date').value;
-        const time = document.getElementById('reservation_time').value;
-        const guests = document.getElementById('number_of_guests').value;
+        const date = document.getElementById('reservation_date')?.value;
+        const time = document.getElementById('reservation_time')?.value;
+        const guests = document.getElementById('number_of_guests')?.value;
 
         if (!date || !time || !guests) return;
 
@@ -297,7 +297,7 @@ class RestaurantClient {
             const response = await API.Tables.getAvailable();
 
             if (response.success) {
-                // Фільтруємо столики за місткістю
+                
                 const suitableTables = response.data.filter(table =>
                     table.capacity >= parseInt(guests)
                 );
@@ -330,7 +330,7 @@ class RestaurantClient {
                 showAlert('Резервацію успішно створено! Ми зв\'яжемося з вами для підтвердження.', 'success');
                 clearForm('reservation-form');
 
-                // Скролимо до верху форми
+                
                 document.getElementById('reservation').scrollIntoView({ behavior: 'smooth' });
             }
         } catch (error) {
@@ -345,7 +345,10 @@ class RestaurantClient {
      */
     setRating(rating) {
         this.selectedRating = rating;
-        document.getElementById('rating').value = rating;
+        const ratingInput = document.getElementById('rating');
+        if (ratingInput) {
+            ratingInput.value = rating;
+        }
         this.highlightStars(rating);
     }
 
@@ -387,7 +390,7 @@ class RestaurantClient {
                 clearForm('feedback-form');
                 this.setRating(0);
 
-                // Перезавантажуємо відгуки
+                
                 await this.loadFeedback();
                 await this.loadFeedbackStats();
             }
@@ -542,7 +545,7 @@ class RestaurantClient {
      * Налаштування мобільного меню
      */
     setupMobileMenu() {
-        // Додаємо кнопку мобільного меню якщо її немає
+        
         const navbar = document.querySelector('.navbar .container > div');
         if (navbar && !document.querySelector('.navbar-toggle')) {
             const toggleButton = document.createElement('button');
@@ -563,12 +566,69 @@ class RestaurantClient {
             navbarNav.classList.toggle('show');
         }
     }
+
+    /**
+     * Показати повідомлення про успіх
+     */
+    showSuccessMessage(message) {
+        const alertContainer = document.createElement('div');
+        alertContainer.className = 'success-message';
+        alertContainer.textContent = message;
+
+        const container = document.querySelector('.container');
+        if (container) {
+            container.insertBefore(alertContainer, container.firstChild);
+
+            
+            setTimeout(() => {
+                if (alertContainer.parentNode) {
+                    alertContainer.parentNode.removeChild(alertContainer);
+                }
+            }, 5000);
+        }
+    }
+
+    /**
+     * Перевірка чи елемент у viewport
+     */
+    isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    /**
+     * Анімація появи елементів при скролі
+     */
+    animateOnScroll() {
+        const elements = document.querySelectorAll('.menu-item, .feedback-item, .info-card');
+
+        elements.forEach(element => {
+            if (this.isInViewport(element)) {
+                element.classList.add('fade-in');
+            }
+        });
+    }
 }
 
-// Ініціалізуємо клієнт після завантаження DOM
+
 document.addEventListener('DOMContentLoaded', () => {
-    new RestaurantClient();
+    const client = new RestaurantClient();
+
+    
+    window.addEventListener('scroll', () => {
+        client.animateOnScroll();
+    });
+
+    
+    setTimeout(() => {
+        client.animateOnScroll();
+    }, 500);
 });
 
-// Експортуємо клас для глобального використання
+
 window.RestaurantClient = RestaurantClient;

@@ -71,6 +71,7 @@ p {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    width: 100%;
 }
 
 .container-fluid {
@@ -78,26 +79,33 @@ p {
     padding: 0 20px;
 }
 
-/* Сітка */
+/* Покращена сітка */
 .row {
     display: flex;
     flex-wrap: wrap;
     margin: 0 -15px;
+    width: 100%;
 }
 
 .col {
     flex: 1;
     padding: 0 15px;
+    width: 100%;
 }
 
-.col-1 { flex: 0 0 8.33%; }
-.col-2 { flex: 0 0 16.66%; }
-.col-3 { flex: 0 0 25%; }
-.col-4 { flex: 0 0 33.33%; }
-.col-6 { flex: 0 0 50%; }
-.col-8 { flex: 0 0 66.66%; }
-.col-9 { flex: 0 0 75%; }
-.col-12 { flex: 0 0 100%; }
+/* Колонки з правильними пропорціями */
+.col-1 { flex: 0 0 8.33%; max-width: 8.33%; }
+.col-2 { flex: 0 0 16.66%; max-width: 16.66%; }
+.col-3 { flex: 0 0 25%; max-width: 25%; }
+.col-4 { flex: 0 0 33.33%; max-width: 33.33%; }
+.col-5 { flex: 0 0 41.66%; max-width: 41.66%; }
+.col-6 { flex: 0 0 50%; max-width: 50%; }
+.col-7 { flex: 0 0 58.33%; max-width: 58.33%; }
+.col-8 { flex: 0 0 66.66%; max-width: 66.66%; }
+.col-9 { flex: 0 0 75%; max-width: 75%; }
+.col-10 { flex: 0 0 83.33%; max-width: 83.33%; }
+.col-11 { flex: 0 0 91.66%; max-width: 91.66%; }
+.col-12 { flex: 0 0 100%; max-width: 100%; }
 
 /* Кнопки */
 .btn {
@@ -114,6 +122,7 @@ p {
     line-height: 1.5;
     white-space: nowrap;
     user-select: none;
+    vertical-align: middle;
 }
 
 .btn:disabled {
@@ -124,10 +133,12 @@ p {
 .btn-primary {
     background-color: var(--primary-color);
     color: var(--white);
+    border: 2px solid var(--primary-color);
 }
 
 .btn-primary:hover:not(:disabled) {
     background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
 }
@@ -135,37 +146,45 @@ p {
 .btn-secondary {
     background-color: var(--gray-600);
     color: var(--white);
+    border: 2px solid var(--gray-600);
 }
 
 .btn-secondary:hover:not(:disabled) {
     background-color: var(--gray-700);
+    border-color: var(--gray-700);
 }
 
 .btn-success {
     background-color: var(--success-color);
     color: var(--white);
+    border: 2px solid var(--success-color);
 }
 
 .btn-success:hover:not(:disabled) {
     background-color: #229954;
+    border-color: #229954;
 }
 
 .btn-danger {
     background-color: var(--danger-color);
     color: var(--white);
+    border: 2px solid var(--danger-color);
 }
 
 .btn-danger:hover:not(:disabled) {
     background-color: #c0392b;
+    border-color: #c0392b;
 }
 
 .btn-warning {
     background-color: var(--warning-color);
     color: var(--white);
+    border: 2px solid var(--warning-color);
 }
 
 .btn-warning:hover:not(:disabled) {
     background-color: #e67e22;
+    border-color: #e67e22;
 }
 
 .btn-outline {
@@ -240,6 +259,12 @@ textarea.form-control {
     box-shadow: var(--box-shadow);
     overflow: hidden;
     margin-bottom: 1.5rem;
+    border: 1px solid var(--gray-200);
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
 }
 
 .card-header {
@@ -298,6 +323,7 @@ textarea.form-control {
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 2px solid var(--light-bg);
 }
 
 .navbar-brand {
@@ -305,6 +331,13 @@ textarea.form-control {
     font-weight: 700;
     color: var(--primary-color);
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-brand:hover {
+    color: var(--primary-dark);
 }
 
 .navbar-nav {
@@ -312,10 +345,11 @@ textarea.form-control {
     list-style: none;
     margin: 0;
     padding: 0;
+    align-items: center;
 }
 
 .nav-item {
-    margin: 0 10px;
+    margin: 0 5px;
 }
 
 .nav-link {
@@ -324,6 +358,7 @@ textarea.form-control {
     padding: 8px 15px;
     border-radius: var(--border-radius);
     transition: var(--transition);
+    font-weight: 500;
 }
 
 .nav-link:hover,
@@ -480,7 +515,10 @@ textarea.form-control {
 
 .justify-content-center { justify-content: center; }
 .justify-content-between { justify-content: space-between; }
+.justify-content-around { justify-content: space-around; }
 .align-items-center { align-items: center; }
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
 
 .mt-1 { margin-top: 0.25rem; }
 .mt-2 { margin-top: 0.5rem; }
@@ -533,10 +571,10 @@ textarea.form-control {
     to { transform: rotate(360deg); }
 }
 
-/* Responsive */
+/* Responsive - головне виправлення */
 @media (max-width: 768px) {
     .container {
-        padding: 0 10px;
+        padding: 0 15px;
     }
 
     .row {
@@ -547,12 +585,39 @@ textarea.form-control {
         padding: 0 10px;
     }
 
-    .col-1, .col-2, .col-3, .col-4, .col-6, .col-8, .col-9 {
+    /* На мобільних всі колонки стають повної ширини */
+    .col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+    .col-7, .col-8, .col-9, .col-10, .col-11 {
         flex: 0 0 100%;
+        max-width: 100%;
     }
 
     .navbar-nav {
         flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        box-shadow: var(--box-shadow);
+        padding: 1rem;
+        display: none;
+    }
+
+    .navbar-nav.show {
+        display: flex;
+    }
+
+    .nav-item {
+        margin: 5px 0;
+        width: 100%;
+    }
+
+    .nav-link {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
     }
 
     .modal-dialog {
@@ -569,6 +634,11 @@ textarea.form-control {
         margin-bottom: 10px;
     }
 
+    .btn-lg {
+        width: auto;
+        display: inline-block;
+    }
+
     .table-responsive {
         font-size: 0.875rem;
     }
@@ -576,7 +646,7 @@ textarea.form-control {
 
 @media (max-width: 480px) {
     .container {
-        padding: 0 5px;
+        padding: 0 10px;
     }
 
     .card-body {
@@ -585,5 +655,9 @@ textarea.form-control {
 
     .modal-body {
         padding: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 0.75rem;
     }
 }

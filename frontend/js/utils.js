@@ -1,15 +1,29 @@
 // js/utils.js - Допоміжні функції та утіліти
 
 /**
- * Показати повідомлення (alert)
+ * Показати повідомлення (alert) з покращеним дизайном
  */
 function showAlert(message, type = 'info', duration = 5000) {
     // Створюємо елемент alert
     const alertDiv = document.createElement('div');
-    alertDiv.className = `alert alert-${type} alert-dismissible`;
+    alertDiv.className = `alert alert-${type} alert-dismissible fade-in`;
+
+    // Іконки для різних типів повідомлень
+    const icons = {
+        success: '✅',
+        danger: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+    };
+
     alertDiv.innerHTML = `
-        ${message}
-        <button type="button" class="alert-close" onclick="this.parentElement.remove()">×</button>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.2rem;">${icons[type] || icons.info}</span>
+            <span>${message}</span>
+        </div>
+        <button type="button" class="alert-close" onclick="this.parentElement.remove()" 
+                style="position: absolute; top: 15px; right: 15px; background: none; border: none; 
+                       font-size: 1.2rem; cursor: pointer; opacity: 0.7;">×</button>
     `;
 
     // Знаходимо контейнер для alerts або створюємо його
@@ -23,29 +37,32 @@ function showAlert(message, type = 'info', duration = 5000) {
             right: 20px;
             z-index: 1060;
             max-width: 400px;
+            width: 100%;
         `;
         document.body.appendChild(alertContainer);
     }
 
-    // Додаємо alert
+    // Додаємо alert з анімацією
     alertContainer.appendChild(alertDiv);
 
     // Автоматично видаляємо через заданий час
     if (duration > 0) {
         setTimeout(() => {
             if (alertDiv.parentElement) {
-                alertDiv.remove();
+                alertDiv.style.opacity = '0';
+                alertDiv.style.transform = 'translateX(100%)';
+                setTimeout(() => alertDiv.remove(), 300);
             }
         }, duration);
     }
 }
 
 /**
- * Показати/сховати індикатор завантаження
+ * Показати/сховати індикатор завантаження з покращеним дизайном
  */
 let loadingCounter = 0;
 
-function showLoading() {
+function showLoading(message = 'Завантаження...') {
     loadingCounter++;
 
     let loader = document.getElementById('global-loader');
@@ -58,23 +75,28 @@ function showLoading() {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px);
         `;
         loader.innerHTML = `
-            <div class="text-center">
-                <div class="spinner" style="width: 40px; height: 40px; border-width: 4px;"></div>
-                <div style="margin-top: 10px; color: var(--gray-700);">Завантаження...</div>
+            <div class="text-center" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+                <div class="spinner" style="width: 50px; height: 50px; border-width: 4px; margin: 0 auto 1rem;"></div>
+                <div style="color: var(--gray-700); font-weight: 500;">${message}</div>
             </div>
         `;
         document.body.appendChild(loader);
+    } else {
+        // Оновлюємо повідомлення
+        const messageEl = loader.querySelector('div div:last-child');
+        if (messageEl) messageEl.textContent = message;
     }
 
     loader.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
 function hideLoading() {
@@ -84,26 +106,51 @@ function hideLoading() {
         const loader = document.getElementById('global-loader');
         if (loader) {
             loader.style.display = 'none';
+            document.body.style.overflow = '';
         }
     }
 }
 
 /**
- * Модальні вікна
+ * Модальні вікна з покращеною анімацією
  */
 function showModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
+
+        // Додаємо анімацію появи
+        const dialog = modal.querySelector('.modal-dialog');
+        if (dialog) {
+            dialog.style.transform = 'scale(0.8)';
+            dialog.style.opacity = '0';
+
+            requestAnimationFrame(() => {
+                dialog.style.transition = 'all 0.3s ease';
+                dialog.style.transform = 'scale(1)';
+                dialog.style.opacity = '1';
+            });
+        }
     }
 }
 
 function hideModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
+        const dialog = modal.querySelector('.modal-dialog');
+        if (dialog) {
+            dialog.style.transform = 'scale(0.8)';
+            dialog.style.opacity = '0';
+
+            setTimeout(() => {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }, 300);
+        } else {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
     }
 }
 
@@ -125,66 +172,96 @@ document.addEventListener('keydown', function(e) {
 });
 
 /**
- * Форматування дати та часу
+ * Форматування дати та часу з локалізацією
  */
 function formatDate(dateString, includeTime = false) {
     if (!dateString) return '';
 
-    const date = new Date(dateString);
-    const options = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    };
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString; // Повертаємо оригінал якщо невалідна дата
 
-    if (includeTime) {
-        options.hour = '2-digit';
-        options.minute = '2-digit';
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            timeZone: 'Europe/Kiev'
+        };
+
+        if (includeTime) {
+            options.hour = '2-digit';
+            options.minute = '2-digit';
+        }
+
+        return date.toLocaleDateString('uk-UA', options);
+    } catch (error) {
+        console.warn('Помилка форматування дати:', error);
+        return dateString;
     }
-
-    return date.toLocaleDateString('uk-UA', options);
 }
 
 function formatTime(timeString) {
     if (!timeString) return '';
 
-    // Якщо час у форматі HH:MM:SS, обрізаємо секунди
-    if (timeString.includes(':')) {
-        const parts = timeString.split(':');
-        return `${parts[0]}:${parts[1]}`;
-    }
+    try {
+        // Якщо час у форматі HH:MM:SS, обрізаємо секунди
+        if (timeString.includes(':')) {
+            const parts = timeString.split(':');
+            return `${parts[0]}:${parts[1]}`;
+        }
 
-    return timeString;
+        return timeString;
+    } catch (error) {
+        console.warn('Помилка форматування часу:', error);
+        return timeString;
+    }
 }
 
 function formatDateTime(dateTimeString) {
     if (!dateTimeString) return '';
 
-    const date = new Date(dateTimeString);
-    return date.toLocaleString('uk-UA', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
+    try {
+        const date = new Date(dateTimeString);
+        if (isNaN(date.getTime())) return dateTimeString;
+
+        return date.toLocaleString('uk-UA', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Europe/Kiev'
+        });
+    } catch (error) {
+        console.warn('Помилка форматування дати і часу:', error);
+        return dateTimeString;
+    }
 }
 
 /**
- * Форматування валюти
+ * Форматування валюти з кращою обробкою
  */
 function formatCurrency(amount) {
     if (amount === null || amount === undefined) return '';
 
-    return new Intl.NumberFormat('uk-UA', {
-        style: 'currency',
-        currency: 'UAH',
-        minimumFractionDigits: 2
-    }).format(amount);
+    try {
+        const numAmount = parseFloat(amount);
+        if (isNaN(numAmount)) return '';
+
+        return new Intl.NumberFormat('uk-UA', {
+            style: 'currency',
+            currency: 'UAH',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(numAmount);
+    } catch (error) {
+        console.warn('Помилка форматування валюти:', error);
+        return amount + ' ₴';
+    }
 }
 
 /**
- * Валідація форм
+ * Покращена валідація форм
  */
 function validateForm(formId) {
     const form = document.getElementById(formId);
@@ -192,13 +269,18 @@ function validateForm(formId) {
 
     const inputs = form.querySelectorAll('[required]');
     let isValid = true;
+    let firstInvalidField = null;
 
     inputs.forEach(input => {
-        if (!input.value.trim()) {
+        const value = input.value.trim();
+
+        // Очищуємо попередні стилі
+        input.classList.remove('is-invalid');
+
+        if (!value) {
             input.classList.add('is-invalid');
             isValid = false;
-        } else {
-            input.classList.remove('is-invalid');
+            if (!firstInvalidField) firstInvalidField = input;
         }
     });
 
@@ -208,6 +290,7 @@ function validateForm(formId) {
         if (input.value && !isValidEmail(input.value)) {
             input.classList.add('is-invalid');
             isValid = false;
+            if (!firstInvalidField) firstInvalidField = input;
         }
     });
 
@@ -217,8 +300,15 @@ function validateForm(formId) {
         if (input.value && !isValidPhone(input.value)) {
             input.classList.add('is-invalid');
             isValid = false;
+            if (!firstInvalidField) firstInvalidField = input;
         }
     });
+
+    // Скролимо до першого невалідного поля
+    if (firstInvalidField) {
+        firstInvalidField.focus();
+        firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
     return isValid;
 }
@@ -229,12 +319,14 @@ function isValidEmail(email) {
 }
 
 function isValidPhone(phone) {
+    // Підтримуємо різні формати українських номерів
     const phoneRegex = /^[\+]?[0-9\s\-\(\)]{10,}$/;
-    return phoneRegex.test(phone);
+    const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+    return phoneRegex.test(phone) && cleanPhone.length >= 10;
 }
 
 /**
- * Робота з формами
+ * Покращена робота з формами
  */
 function getFormData(formId) {
     const form = document.getElementById(formId);
@@ -244,11 +336,25 @@ function getFormData(formId) {
     const data = {};
 
     for (let [key, value] of formData.entries()) {
-        // Обробка checkbox
-        if (form.querySelector(`[name="${key}"]`).type === 'checkbox') {
-            data[key] = form.querySelector(`[name="${key}"]`).checked;
-        } else {
-            data[key] = value;
+        const input = form.querySelector(`[name="${key}"]`);
+
+        if (input) {
+            // Обробка checkbox
+            if (input.type === 'checkbox') {
+                data[key] = input.checked;
+            }
+            // Обробка чисел
+            else if (input.type === 'number') {
+                data[key] = value ? parseFloat(value) : null;
+            }
+            // Обробка дат
+            else if (input.type === 'date' || input.type === 'datetime-local') {
+                data[key] = value || null;
+            }
+            // Звичайні поля
+            else {
+                data[key] = value.trim() || null;
+            }
         }
     }
 
@@ -282,10 +388,14 @@ function clearForm(formId) {
     inputs.forEach(input => {
         input.classList.remove('is-invalid', 'is-valid');
     });
+
+    // Очищуємо кастомні елементи (зірки рейтингу тощо)
+    const stars = form.querySelectorAll('.star.active');
+    stars.forEach(star => star.classList.remove('active'));
 }
 
 /**
- * Робота з таблицями
+ * Покращена робота з таблицями
  */
 function createTableRow(data, columns) {
     const row = document.createElement('tr');
@@ -300,6 +410,11 @@ function createTableRow(data, columns) {
                 cell.innerHTML = column.formatter(data[column.key], data);
             } else {
                 cell.textContent = data[column.key] || '';
+            }
+
+            // Додаємо класи якщо вказані
+            if (column.className) {
+                cell.className = column.className;
             }
         }
 
@@ -316,48 +431,74 @@ function updateTable(tableId, data, columns) {
     const tbody = table.querySelector('tbody');
     if (!tbody) return;
 
-    // Очищуємо таблицю
-    tbody.innerHTML = '';
-
-    // Додаємо нові рядки
-    data.forEach(item => {
-        const row = createTableRow(item, columns);
-        tbody.appendChild(row);
+    // Очищуємо таблицю з анімацією
+    const rows = tbody.querySelectorAll('tr');
+    rows.forEach((row, index) => {
+        setTimeout(() => {
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(-20px)';
+        }, index * 50);
     });
+
+    setTimeout(() => {
+        tbody.innerHTML = '';
+
+        // Додаємо нові рядки з анімацією
+        data.forEach((item, index) => {
+            const row = createTableRow(item, columns);
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(20px)';
+            tbody.appendChild(row);
+
+            setTimeout(() => {
+                row.style.transition = 'all 0.3s ease';
+                row.style.opacity = '1';
+                row.style.transform = 'translateX(0)';
+            }, index * 50);
+        });
+    }, rows.length * 50 + 100);
 }
 
 /**
- * Сортування таблиць
+ * Покращене сортування таблиць
  */
 function sortTable(tableId, columnIndex, ascending = true) {
     const table = document.getElementById(tableId);
+    if (!table) return;
+
     const tbody = table.querySelector('tbody');
     const rows = Array.from(tbody.querySelectorAll('tr'));
 
     rows.sort((a, b) => {
-        const aText = a.cells[columnIndex].textContent.trim();
-        const bText = b.cells[columnIndex].textContent.trim();
+        const aText = a.cells[columnIndex]?.textContent.trim() || '';
+        const bText = b.cells[columnIndex]?.textContent.trim() || '';
 
         // Спробуємо конвертувати в числа
-        const aNum = parseFloat(aText);
-        const bNum = parseFloat(bText);
+        const aNum = parseFloat(aText.replace(/[^\d.-]/g, ''));
+        const bNum = parseFloat(bText.replace(/[^\d.-]/g, ''));
 
         if (!isNaN(aNum) && !isNaN(bNum)) {
             return ascending ? aNum - bNum : bNum - aNum;
         } else {
-            return ascending ? aText.localeCompare(bText) : bText.localeCompare(aText);
+            return ascending ? aText.localeCompare(bText, 'uk') : bText.localeCompare(aText, 'uk');
         }
     });
 
-    // Перебудовуємо таблицю
-    rows.forEach(row => tbody.appendChild(row));
+    // Перебудовуємо таблицю з анімацією
+    rows.forEach((row, index) => {
+        setTimeout(() => {
+            tbody.appendChild(row);
+        }, index * 20);
+    });
 }
 
 /**
- * Фільтрація таблиць
+ * Покращена фільтрація таблиць
  */
 function filterTable(tableId, searchValue, columns = []) {
     const table = document.getElementById(tableId);
+    if (!table) return;
+
     const tbody = table.querySelector('tbody');
     const rows = tbody.querySelectorAll('tr');
 
@@ -380,25 +521,43 @@ function filterTable(tableId, searchValue, columns = []) {
             });
         }
 
-        row.style.display = found ? '' : 'none';
+        // Анімований показ/приховування
+        if (found) {
+            row.style.display = '';
+            row.style.opacity = '1';
+            row.style.transform = 'translateX(0)';
+        } else {
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(-20px)';
+            setTimeout(() => {
+                if (row.style.opacity === '0') {
+                    row.style.display = 'none';
+                }
+            }, 300);
+        }
     });
 }
 
 /**
- * Роботу з localStorage
+ * Безпечна робота з localStorage
  */
 function saveToStorage(key, data) {
     try {
-        localStorage.setItem(key, JSON.stringify(data));
+        const serializedData = JSON.stringify(data);
+        localStorage.setItem(key, serializedData);
+        return true;
     } catch (error) {
         console.error('Помилка збереження в localStorage:', error);
+        return false;
     }
 }
 
 function loadFromStorage(key, defaultValue = null) {
     try {
         const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : defaultValue;
+        if (item === null) return defaultValue;
+
+        return JSON.parse(item);
     } catch (error) {
         console.error('Помилка завантаження з localStorage:', error);
         return defaultValue;
@@ -408,41 +567,78 @@ function loadFromStorage(key, defaultValue = null) {
 function removeFromStorage(key) {
     try {
         localStorage.removeItem(key);
+        return true;
     } catch (error) {
         console.error('Помилка видалення з localStorage:', error);
+        return false;
     }
 }
 
 /**
- * Дебаунс функція для оптимізації пошуку
+ * Покращений дебаунс з можливістю скасування
  */
-function debounce(func, wait) {
+function debounce(func, wait, immediate = false) {
     let timeout;
-    return function executedFunction(...args) {
+
+    const debounced = function executedFunction(...args) {
         const later = () => {
-            clearTimeout(timeout);
-            func(...args);
+            timeout = null;
+            if (!immediate) func(...args);
         };
+
+        const callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
+
+        if (callNow) func(...args);
     };
+
+    debounced.cancel = function() {
+        clearTimeout(timeout);
+        timeout = null;
+    };
+
+    return debounced;
 }
 
 /**
- * Копіювання тексту в буфер обміну
+ * Покращене копіювання в буфер обміну
  */
 async function copyToClipboard(text) {
     try {
-        await navigator.clipboard.writeText(text);
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+        } else {
+            // Fallback для старих браузерів
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                textArea.remove();
+            } catch (err) {
+                textArea.remove();
+                throw err;
+            }
+        }
+
         showAlert('Скопійовано в буфер обміну', 'success', 2000);
+        return true;
     } catch (error) {
         console.error('Помилка копіювання:', error);
         showAlert('Помилка копіювання', 'danger', 3000);
+        return false;
     }
 }
 
 /**
- * Експорт даних в CSV
+ * Покращений експорт в CSV з українською підтримкою
  */
 function exportToCSV(data, filename) {
     if (!data || data.length === 0) {
@@ -450,35 +646,76 @@ function exportToCSV(data, filename) {
         return;
     }
 
-    const headers = Object.keys(data[0]);
-    const csvContent = [
-        headers.join(','),
-        ...data.map(row =>
-            headers.map(header =>
-                `"${String(row[header] || '').replace(/"/g, '""')}"`
-            ).join(',')
-        )
-    ].join('\n');
+    try {
+        const headers = Object.keys(data[0]);
+        const csvContent = [
+            // BOM для правильного відображення української мови в Excel
+            '\ufeff',
+            headers.join(','),
+            ...data.map(row =>
+                headers.map(header => {
+                    const value = String(row[header] || '');
+                    // Екрануємо лапки та переноси рядків
+                    return `"${value.replace(/"/g, '""').replace(/\n/g, ' ')}"`;
+                }).join(',')
+            )
+        ].join('\n');
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
 
-    if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        if (link.download !== undefined) {
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showAlert('Файл успішно завантажено', 'success');
+        } else {
+            showAlert('Браузер не підтримує завантаження файлів', 'warning');
+        }
+    } catch (error) {
+        console.error('Помилка експорту CSV:', error);
+        showAlert('Помилка експорту файлу', 'danger');
     }
+}
+
+/**
+ * Перевірка підключення до інтернету
+ */
+function checkOnlineStatus() {
+    const updateOnlineStatus = () => {
+        if (!navigator.onLine) {
+            showAlert('Відсутнє підключення до інтернету', 'warning', 0);
+        } else {
+            // Видаляємо повідомлення про відсутність інтернету
+            const alerts = document.querySelectorAll('.alert-warning');
+            alerts.forEach(alert => {
+                if (alert.textContent.includes('інтернету')) {
+                    alert.remove();
+                }
+            });
+        }
+    };
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // Початкова перевірка
+    updateOnlineStatus();
 }
 
 /**
  * Ініціалізація спільних обробників подій
  */
 document.addEventListener('DOMContentLoaded', function() {
-    // Додаємо клас is-invalid для невалідних полів
+    // Перевіряємо статус підключення
+    checkOnlineStatus();
+
+    // Додаємо валідацію для полів форм
     const inputs = document.querySelectorAll('input, select, textarea');
     inputs.forEach(input => {
         input.addEventListener('blur', function() {
@@ -494,6 +731,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.remove('is-invalid');
             }
         });
+    });
+
+    // Автоматично закриваємо алерти при кліку
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('alert-close')) {
+            const alert = e.target.closest('.alert');
+            if (alert) {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateX(100%)';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }
     });
 });
 
@@ -523,5 +772,6 @@ window.Utils = {
     removeFromStorage,
     debounce,
     copyToClipboard,
-    exportToCSV
+    exportToCSV,
+    checkOnlineStatus
 };
