@@ -65,20 +65,20 @@
 </section>
 
 <!-- Резервація столиків -->
-<section id="reservation" class="reservation-section bg-light">
+<section id="reservation" class="reservation-section">
     <div class="container">
         <h2 class="section-title text-center">Забронювати столик</h2>
         <p class="section-subtitle text-center">Зарезервуйте столик на зручний для вас час</p>
 
-        <div class="row">
-            <!-- Форма резервації -->
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Форма резервації</h3>
-                    </div>
-                    <div class="card-body">
-                        <form id="reservation-form">
+        <!-- Форма резервації - тепер на всю ширину -->
+        <div class="reservation-form-container">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Форма резервації</h3>
+                </div>
+                <div class="card-body">
+                    <form id="reservation-form">
+                        <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label" for="customer_name">Ваше ім'я *</label>
                                 <input type="text" class="form-control" id="customer_name" name="customer_name" required>
@@ -89,108 +89,100 @@
                                 <input type="tel" class="form-control" id="customer_phone" name="customer_phone"
                                        placeholder="+380501234567" required>
                             </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="form-label" for="reservation_date">Дата *</label>
-                                        <input type="date" class="form-control" id="reservation_date"
-                                               name="reservation_date" required>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="form-label" for="reservation_time">Час *</label>
-                                        <select class="form-control" id="reservation_time" name="reservation_time" required>
-                                            <option value="">Оберіть час</option>
-                                            <option value="12:00">12:00</option>
-                                            <option value="12:30">12:30</option>
-                                            <option value="13:00">13:00</option>
-                                            <option value="13:30">13:30</option>
-                                            <option value="14:00">14:00</option>
-                                            <option value="14:30">14:30</option>
-                                            <option value="18:00">18:00</option>
-                                            <option value="18:30">18:30</option>
-                                            <option value="19:00">19:00</option>
-                                            <option value="19:30">19:30</option>
-                                            <option value="20:00">20:00</option>
-                                            <option value="20:30">20:30</option>
-                                            <option value="21:00">21:00</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="form-label" for="number_of_guests">Кількість гостей *</label>
-                                        <select class="form-control" id="number_of_guests" name="number_of_guests" required>
-                                            <option value="">Оберіть кількість</option>
-                                            <option value="1">1 особа</option>
-                                            <option value="2">2 особи</option>
-                                            <option value="3">3 особи</option>
-                                            <option value="4">4 особи</option>
-                                            <option value="5">5 осіб</option>
-                                            <option value="6">6 осіб</option>
-                                            <option value="7">7 осіб</option>
-                                            <option value="8">8 осіб</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-group">
-                                        <label class="form-label" for="table_id">Столик</label>
-                                        <select class="form-control" id="table_id" name="table_id">
-                                            <option value="">Будь-який доступний</option>
-                                            <!-- Столики будуть додані динамічно -->
-                                        </select>
-                                    </div>
-                                </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="reservation_date">Дата *</label>
+                                <input type="date" class="form-control" id="reservation_date"
+                                       name="reservation_date" required>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label" for="notes">Додаткові побажання</label>
-                                <textarea class="form-control" id="notes" name="notes" rows="3"
-                                          placeholder="Наприклад: день народження, дієтичні вимоги..."></textarea>
+                                <label class="form-label" for="reservation_time">Час *</label>
+                                <select class="form-control" id="reservation_time" name="reservation_time" required>
+                                    <option value="">Оберіть час</option>
+                                    <option value="12:00">12:00</option>
+                                    <option value="12:30">12:30</option>
+                                    <option value="13:00">13:00</option>
+                                    <option value="13:30">13:30</option>
+                                    <option value="14:00">14:00</option>
+                                    <option value="14:30">14:30</option>
+                                    <option value="18:00">18:00</option>
+                                    <option value="18:30">18:30</option>
+                                    <option value="19:00">19:00</option>
+                                    <option value="19:30">19:30</option>
+                                    <option value="20:00">20:00</option>
+                                    <option value="20:30">20:30</option>
+                                    <option value="21:00">21:00</option>
+                                </select>
                             </div>
 
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary btn-lg">Забронювати столик</button>
+                            <div class="form-group">
+                                <label class="form-label" for="number_of_guests">Кількість гостей *</label>
+                                <select class="form-control" id="number_of_guests" name="number_of_guests" required>
+                                    <option value="">Оберіть кількість</option>
+                                    <option value="1">1 особа</option>
+                                    <option value="2">2 особи</option>
+                                    <option value="3">3 особи</option>
+                                    <option value="4">4 особи</option>
+                                    <option value="5">5 осіб</option>
+                                    <option value="6">6 осіб</option>
+                                    <option value="7">7 осіб</option>
+                                    <option value="8">8 осіб</option>
+                                </select>
                             </div>
-                        </form>
-                    </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="table_id">Столик</label>
+                                <select class="form-control" id="table_id" name="table_id">
+                                    <option value="">Будь-який доступний</option>
+                                    <!-- Столики будуть додані динамічно -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="notes">Додаткові побажання</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3"
+                                      placeholder="Наприклад: день народження, дієтичні вимоги..."></textarea>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">Забронювати столик</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Інформація про резервацію -->
-            <div class="col-6">
-                <div class="reservation-info">
-                    <h3>Інформація про резервацію</h3>
+        <!-- Інформація про резервацію - тепер внизу -->
+        <div class="reservation-info-section">
+            <h3 class="text-center mb-4">Інформація про резервацію</h3>
 
-                    <div class="info-card">
-                        <h4>⏰ Години роботи:</h4>
-                        <p>Понеділок - Четвер: 12:00 - 22:00<br>
-                            П'ятниця - Субота: 12:00 - 23:00<br>
-                            Неділя: 12:00 - 21:00</p>
-                    </div>
+            <div class="info-cards-grid">
+                <div class="info-card">
+                    <h4>⏰ Години роботи:</h4>
+                    <p>Понеділок - Четвер: 12:00 - 22:00<br>
+                        П'ятниця - Субота: 12:00 - 23:00<br>
+                        Неділя: 12:00 - 21:00</p>
+                </div>
 
-                    <div class="info-card">
-                        <h4>📋 Умови резервації:</h4>
-                        <ul>
-                            <li>Резервація діє протягом 2 годин</li>
-                            <li>За спізнення більше ніж на 15 хвилин столик може бути переданий іншим гостям</li>
-                            <li>Для груп більше 8 осіб зверніться по телефону</li>
-                            <li>Скасування резервації можливе за 2 години до часу візиту</li>
-                        </ul>
-                    </div>
+                <div class="info-card">
+                    <h4>📋 Умови резервації:</h4>
+                    <ul>
+                        <li>Резервація діє протягом 2 годин</li>
+                        <li>За спізнення більше ніж на 15 хвилин столик може бути переданий іншим гостям</li>
+                        <li>Для груп більше 8 осіб зверніться по телефону</li>
+                        <li>Скасування резервації можливе за 2 години до часу візиту</li>
+                    </ul>
+                </div>
 
-                    <div class="info-card">
-                        <h4>📞 Контакти:</h4>
-                        <p>Телефон: +38 (044) 123-45-67<br>
-                            Email: info@smachna-kuhnya.com.ua<br>
-                            Адреса: вул. Хрещатик, 1, Київ</p>
-                    </div>
+                <div class="info-card">
+                    <h4>📞 Контакти:</h4>
+                    <p>Телефон: +38 (044) 123-45-67<br>
+                        Email: info@smachna-kuhnya.com.ua<br>
+                        Адреса: вул. Хрещатик, 1, Київ</p>
                 </div>
             </div>
         </div>
@@ -203,16 +195,9 @@
         <h2 class="section-title text-center">Відгуки наших гостей</h2>
         <p class="section-subtitle text-center">Дізнайтеся, що кажуть про нас наші клієнти</p>
 
-        <div class="row">
-            <!-- Список відгуків -->
-            <div class="col-8">
-                <div id="feedback-container" class="feedback-list">
-                    <!-- Відгуки будуть додані динамічно -->
-                </div>
-            </div>
-
-            <!-- Статистика та форма -->
-            <div class="col-4">
+        <!-- Статистика та форма відгуку - тепер вгорі -->
+        <div class="feedback-top-section">
+            <div class="feedback-stats-card">
                 <div class="card">
                     <div class="card-header">
                         <h3>Статистика відгуків</h3>
@@ -223,8 +208,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card mt-3">
+            <div class="feedback-form-card">
+                <div class="card">
                     <div class="card-header">
                         <h3>Залишити відгук</h3>
                     </div>
@@ -254,10 +241,18 @@
                                           rows="4" placeholder="Розкажіть про ваш досвід..."></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Надіслати відгук</button>
+                            <button type="submit" class="btn btn-primary btn-block">Надіслати відгук</button>
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Список відгуків - тепер внизу -->
+        <div class="feedback-list-section">
+            <h3 class="text-center mb-4">Відгуки клієнтів</h3>
+            <div id="feedback-container" class="feedback-list">
+                <!-- Відгуки будуть додані динамічно -->
             </div>
         </div>
     </div>
@@ -266,20 +261,20 @@
 <!-- Футер -->
 <footer class="footer">
     <div class="container">
-        <div class="row">
-            <div class="col-4">
+        <div class="footer-content">
+            <div class="footer-section">
                 <h4>Ресторан "Смачна кухня"</h4>
                 <p>Справжня українська кухня з європейським підходом. Ми готуємо з любов'ю!</p>
             </div>
 
-            <div class="col-4">
+            <div class="footer-section">
                 <h4>Контакти</h4>
                 <p>📍 вул. Хрещатик, 1, Київ<br>
                     📞 +38 (044) 123-45-67<br>
                     ✉️ info@smachna-kuhnya.com.ua</p>
             </div>
 
-            <div class="col-4">
+            <div class="footer-section">
                 <h4>Графік роботи</h4>
                 <p>Пн-Чт: 12:00 - 22:00<br>
                     Пт-Сб: 12:00 - 23:00<br>

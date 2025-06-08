@@ -66,7 +66,7 @@ p {
     margin-bottom: 1rem;
 }
 
-/* Контейнери */
+/* Контейнери - ПОКРАЩЕНІ */
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -79,7 +79,7 @@ p {
     padding: 0 20px;
 }
 
-/* Покращена сітка */
+/* Покращена сітка - ГОЛОВНІ ЗМІНИ */
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -91,9 +91,10 @@ p {
     flex: 1;
     padding: 0 15px;
     width: 100%;
+    margin-bottom: 1rem; /* Додаємо відступ між рядами */
 }
 
-/* Колонки з правильними пропорціями */
+/* Колонки з правильними пропорціями та відступами */
 .col-1 { flex: 0 0 8.33%; max-width: 8.33%; }
 .col-2 { flex: 0 0 16.66%; max-width: 16.66%; }
 .col-3 { flex: 0 0 25%; max-width: 25%; }
@@ -123,6 +124,7 @@ p {
     white-space: nowrap;
     user-select: none;
     vertical-align: middle;
+    margin-bottom: 0.5rem; /* Додаємо відступ між кнопками */
 }
 
 .btn:disabled {
@@ -208,9 +210,14 @@ p {
     font-size: 1.125rem;
 }
 
-/* Форми */
+.btn-block {
+    width: 100%;
+    display: block;
+}
+
+/* Форми - ПОКРАЩЕНІ */
 .form-group {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem; /* Збільшуємо відступ між полями */
 }
 
 .form-label {
@@ -223,7 +230,7 @@ p {
 .form-control {
     display: block;
     width: 100%;
-    padding: 10px 15px;
+    padding: 12px 15px; /* Збільшуємо padding */
     border: 1px solid var(--gray-300);
     border-radius: var(--border-radius);
     font-size: 1rem;
@@ -252,19 +259,27 @@ textarea.form-control {
     min-height: 100px;
 }
 
-/* Картки */
+/* Покращена сітка форм */
+.form-row {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* Картки - ПОКРАЩЕНІ */
 .card {
     background-color: var(--white);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     overflow: hidden;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem; /* Збільшуємо відступ між картками */
     border: 1px solid var(--gray-200);
+    transition: var(--transition);
 }
 
 .card:hover {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: var(--transition);
+    transform: translateY(-2px);
 }
 
 .card-header {
@@ -275,7 +290,7 @@ textarea.form-control {
 }
 
 .card-body {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem; /* Збільшуємо padding */
 }
 
 .card-footer {
@@ -292,6 +307,7 @@ textarea.form-control {
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: var(--box-shadow);
+    margin-bottom: 2rem; /* Додаємо відступ після таблиці */
 }
 
 .table th,
@@ -313,9 +329,10 @@ textarea.form-control {
 
 .table-responsive {
     overflow-x: auto;
+    margin-bottom: 1rem;
 }
 
-/* Навігація */
+/* Навігація - ПОКРАЩЕНА */
 .navbar {
     background-color: var(--white);
     box-shadow: var(--box-shadow);
@@ -346,10 +363,11 @@ textarea.form-control {
     margin: 0;
     padding: 0;
     align-items: center;
+    gap: 0.5rem; /* Додаємо відступ між навігаційними елементами */
 }
 
 .nav-item {
-    margin: 0 5px;
+    margin: 0;
 }
 
 .nav-link {
@@ -394,6 +412,7 @@ textarea.form-control {
     max-height: 90%;
     overflow-y: auto;
     animation: modalFadeIn 0.3s ease;
+    margin: 1rem; /* Додаємо відступ */
 }
 
 @keyframes modalFadeIn {
@@ -439,7 +458,7 @@ textarea.form-control {
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem; /* Збільшуємо padding */
 }
 
 .modal-footer {
@@ -520,22 +539,23 @@ textarea.form-control {
 .align-items-start { align-items: flex-start; }
 .align-items-end { align-items: flex-end; }
 
-.mt-1 { margin-top: 0.25rem; }
-.mt-2 { margin-top: 0.5rem; }
-.mt-3 { margin-top: 1rem; }
-.mt-4 { margin-top: 1.5rem; }
+/* Покращені відступи */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
 .mt-5 { margin-top: 3rem; }
 
-.mb-1 { margin-bottom: 0.25rem; }
-.mb-2 { margin-bottom: 0.5rem; }
-.mb-3 { margin-bottom: 1rem; }
-.mb-4 { margin-bottom: 1.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
 .mb-5 { margin-bottom: 3rem; }
 
-.p-1 { padding: 0.25rem; }
-.p-2 { padding: 0.5rem; }
-.p-3 { padding: 1rem; }
-.p-4 { padding: 1.5rem; }
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
 .p-5 { padding: 3rem; }
 
 .text-primary { color: var(--primary-color); }
@@ -571,7 +591,17 @@ textarea.form-control {
     to { transform: rotate(360deg); }
 }
 
-/* Responsive - головне виправлення */
+/* Responsive - ПОКРАЩЕНА АДАПТИВНІСТЬ */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; }
+    h3 { font-size: 1.6rem; }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 0 15px;
@@ -583,13 +613,15 @@ textarea.form-control {
 
     .col {
         padding: 0 10px;
+        margin-bottom: 1.5rem; /* Збільшуємо відступ на мобільних */
     }
 
-    /* На мобільних всі колонки стають повної ширини */
+    /* На мобільних всі колонки стають повної ширини з відступами */
     .col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
     .col-7, .col-8, .col-9, .col-10, .col-11 {
         flex: 0 0 100%;
         max-width: 100%;
+        margin-bottom: 1.5rem;
     }
 
     .navbar-nav {
@@ -617,7 +649,7 @@ textarea.form-control {
         display: block;
         width: 100%;
         text-align: center;
-        padding: 10px;
+        padding: 12px;
     }
 
     .modal-dialog {
@@ -642,6 +674,15 @@ textarea.form-control {
     .table-responsive {
         font-size: 0.875rem;
     }
+
+    /* Покращення форм на мобільних */
+    .form-control {
+        padding: 14px 15px; /* Збільшуємо для кращого touch */
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -658,6 +699,68 @@ textarea.form-control {
     }
 
     .form-group {
-        margin-bottom: 0.75rem;
+        margin-bottom: 1rem;
     }
+
+    h1 { font-size: 1.8rem; }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.4rem; }
+}
+
+/* Покращені секції */
+section {
+    margin-bottom: 0; /* Видаляємо зайві відступи між секціями */
+}
+
+/* Додаткові утіліти для відступів */
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+.gap-4 { gap: 2rem; }
+.gap-5 { gap: 3rem; }
+
+/* Покращені анімації */
+.fade-in {
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Покращені hover ефекти */
+.card, .btn, .menu-item, .feedback-item, .info-card {
+    transition: var(--transition);
+}
+
+/* Покращена типографіка для довгих текстів */
+.text-content {
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.text-content p {
+    margin-bottom: 1.2rem;
+}
+
+/* Покращена обробка overflow */
+.text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Покращені фокус стани */
+.form-control:focus,
+.btn:focus,
+.nav-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
 }
