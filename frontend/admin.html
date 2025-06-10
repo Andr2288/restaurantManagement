@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін панель - Ресторан "Смачна кухня"</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<!-- Навігація -->
+<nav class="navbar">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="#" class="navbar-brand">🍽️ Адмін панель</a>
+
+            <div class="navbar-nav d-flex">
+                <a href="#dashboard" class="nav-link active" data-tab="dashboard">📊 Дашборд</a>
+                <a href="#menu" class="nav-link" data-tab="menu">🍽️ Меню</a>
+                <a href="#orders" class="nav-link" data-tab="orders">📋 Замовлення</a>
+                <a href="#reservations" class="nav-link" data-tab="reservations">📅 Резервації</a>
+                <a href="#tables" class="nav-link" data-tab="tables">🪑 Столики</a>
+                <a href="#employees" class="nav-link" data-tab="employees">👥 Персонал</a>
+                <a href="#feedback" class="nav-link" data-tab="feedback">💬 Відгуки</a>
+                <a href="index.html" class="nav-link">🏠 На сайт</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Основний контент -->
+<main class="main-content">
+    <div class="container">
+        <!-- Дашборд -->
+        <section id="dashboard" class="admin-section active">
+            <div class="section-header">
+                <h1>📊 Дашборд</h1>
+                <p>Огляд основних показників ресторану</p>
+            </div>
+
+            <!-- Статистичні картки -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="stat-orders">-</div>
+                        <div class="stat-label">Замовлення сьогодні</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="stat-reservations">-</div>
+                        <div class="stat-label">Резервації сьогодні</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="stat-revenue">-</div>
+                        <div class="stat-label">Виручка сьогодні</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="stat-rating">-</div>
+                        <div class="stat-label">Середня оцінка</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Активні замовлення -->
+            <div class="dashboard-section">
+                <h2>🔥 Активні замовлення</h2>
+                <div id="active-orders" class="orders-grid">
+                    <!-- Активні замовлення -->
+                </div>
+            </div>
+
+            <!-- Майбутні резервації -->
+            <div class="dashboard-section">
+                <h2>📅 Сьогоднішні резервації</h2>
+                <div id="today-reservations" class="reservations-list">
+                    <!-- Резервації -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Меню -->
+        <section id="menu" class="admin-section">
+            <div class="section-header">
+                <h1>🍽️ Управління меню</h1>
+                <button class="btn btn-primary" onclick="openMenuModal()">
+                    ➕ Додати страву
+                </button>
+            </div>
+
+            <!-- Фільтри -->
+            <div class="filters-bar">
+                <select id="menu-category-filter" class="form-control">
+                    <option value="all">Всі категорії</option>
+                    <option value="Салати">Салати</option>
+                    <option value="Супи">Супи</option>
+                    <option value="Основні страви">Основні страви</option>
+                    <option value="Гарніри">Гарніри</option>
+                    <option value="Десерти">Десерти</option>
+                    <option value="Напої">Напої</option>
+                    <option value="Алкоголь">Алкоголь</option>
+                </select>
+                <input type="text" id="menu-search" class="form-control" placeholder="Пошук страв...">
+            </div>
+
+            <!-- Таблиця меню -->
+            <div class="table-responsive">
+                <table id="menu-table" class="table">
+                    <thead>
+                    <tr>
+                        <th>Назва</th>
+                        <th>Категорія</th>
+                        <th>Ціна</th>
+                        <th>Час готування</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Дані меню -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Замовлення -->
+        <section id="orders" class="admin-section">
+            <div class="section-header">
+                <h1>📋 Управління замовленнями</h1>
+                <button class="btn btn-primary" onclick="openOrderModal()">
+                    ➕ Нове замовлення
+                </button>
+            </div>
+
+            <!-- Фільтри -->
+            <div class="filters-bar">
+                <select id="order-status-filter" class="form-control">
+                    <option value="all">Всі статуси</option>
+                    <option value="Нове">Нове</option>
+                    <option value="Готується">Готується</option>
+                    <option value="Готове">Готове</option>
+                    <option value="Подано">Подано</option>
+                    <option value="Оплачено">Оплачено</option>
+                    <option value="Скасовано">Скасовано</option>
+                </select>
+                <input type="date" id="order-date-filter" class="form-control">
+            </div>
+
+            <!-- Таблиця замовлень -->
+            <div class="table-responsive">
+                <table id="orders-table" class="table">
+                    <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Столик</th>
+                        <th>Офіціант</th>
+                        <th>Дата/Час</th>
+                        <th>Сума</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Дані замовлень -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Резервації -->
+        <section id="reservations" class="admin-section">
+            <div class="section-header">
+                <h1>📅 Управління резерваціями</h1>
+                <button class="btn btn-primary" onclick="openReservationModal()">
+                    ➕ Нова резервація
+                </button>
+            </div>
+
+            <!-- Фільтри -->
+            <div class="filters-bar">
+                <select id="reservation-status-filter" class="form-control">
+                    <option value="all">Всі статуси</option>
+                    <option value="Підтверджено">Підтверджено</option>
+                    <option value="Прибули">Прибули</option>
+                    <option value="Не з'явились">Не з'явились</option>
+                    <option value="Скасовано">Скасовано</option>
+                </select>
+                <input type="date" id="reservation-date-filter" class="form-control">
+            </div>
+
+            <!-- Таблиця резервацій -->
+            <div class="table-responsive">
+                <table id="reservations-table" class="table">
+                    <thead>
+                    <tr>
+                        <th>Клієнт</th>
+                        <th>Телефон</th>
+                        <th>Дата/Час</th>
+                        <th>Столик</th>
+                        <th>Гості</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Дані резервацій -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Столики -->
+        <section id="tables" class="admin-section">
+            <div class="section-header">
+                <h1>🪑 Управління столиками</h1>
+                <button class="btn btn-primary" onclick="openTableModal()">
+                    ➕ Додати столик
+                </button>
+            </div>
+
+            <!-- Таблиця столиків -->
+            <div class="table-responsive">
+                <table id="tables-table" class="table">
+                    <thead>
+                    <tr>
+                        <th>Номер</th>
+                        <th>Місткість</th>
+                        <th>Розташування</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Дані столиків -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Персонал -->
+        <section id="employees" class="admin-section">
+            <div class="section-header">
+                <h1>👥 Управління персоналом</h1>
+                <button class="btn btn-primary" onclick="openEmployeeModal()">
+                    ➕ Додати співробітника
+                </button>
+            </div>
+
+            <!-- Фільтри -->
+            <div class="filters-bar">
+                <select id="employee-position-filter" class="form-control">
+                    <option value="all">Всі посади</option>
+                    <option value="Офіціант">Офіціант</option>
+                    <option value="Кухар">Кухар</option>
+                    <option value="Бармен">Бармен</option>
+                    <option value="Менеджер">Менеджер</option>
+                    <option value="Адміністратор">Адміністратор</option>
+                </select>
+                <input type="text" id="employee-search" class="form-control" placeholder="Пошук співробітників...">
+            </div>
+
+            <!-- Таблиця співробітників -->
+            <div class="table-responsive">
+                <table id="employees-table" class="table">
+                    <thead>
+                    <tr>
+                        <th>Ім'я</th>
+                        <th>Посада</th>
+                        <th>Телефон</th>
+                        <th>Email</th>
+                        <th>Зарплата</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Дані співробітників -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Відгуки -->
+        <section id="feedback" class="admin-section">
+            <div class="section-header">
+                <h1>💬 Управління відгуками</h1>
+                <div class="feedback-stats">
+                    <span id="feedback-total">0 відгуків</span>
+                    <span id="feedback-avg">⭐ 0.0</span>
+                </div>
+            </div>
+
+            <!-- Фільтри -->
+            <div class="filters-bar">
+                <select id="feedback-rating-filter" class="form-control">
+                    <option value="all">Всі оцінки</option>
+                    <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                    <option value="4">⭐⭐⭐⭐ (4)</option>
+                    <option value="3">⭐⭐⭐ (3)</option>
+                    <option value="2">⭐⭐ (2)</option>
+                    <option value="1">⭐ (1)</option>
+                </select>
+                <select id="feedback-published-filter" class="form-control">
+                    <option value="all">Всі відгуки</option>
+                    <option value="1">Опубліковані</option>
+                    <option value="0">Не опубліковані</option>
+                </select>
+            </div>
+
+            <!-- Таблиця відгуків -->
+            <div class="table-responsive">
+                <table id="feedback-table" class="table">
+                    <thead>
+                    <tr>
+                        <th>Клієнт</th>
+                        <th>Оцінка</th>
+                        <th>Коментар</th>
+                        <th>Дата</th>
+                        <th>Статус</th>
+                        <th>Дії</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Дані відгуків -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+
+<!-- Модальні вікна -->
+
+<!-- Модальне вікно меню -->
+<div id="menu-modal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Додати/Редагувати страву</h3>
+            <button type="button" class="modal-close" onclick="hideModal('menu-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="menu-form">
+                <input type="hidden" id="menu-id" name="id">
+
+                <div class="form-group">
+                    <label class="form-label" for="menu-name">Назва страви *</label>
+                    <input type="text" class="form-control" id="menu-name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="menu-category">Категорія *</label>
+                    <select class="form-control" id="menu-category" name="category" required>
+                        <option value="">Оберіть категорію</option>
+                        <option value="Салати">Салати</option>
+                        <option value="Супи">Супи</option>
+                        <option value="Основні страви">Основні страви</option>
+                        <option value="Гарніри">Гарніри</option>
+                        <option value="Десерти">Десерти</option>
+                        <option value="Напої">Напої</option>
+                        <option value="Алкоголь">Алкоголь</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="menu-description">Опис</label>
+                    <textarea class="form-control" id="menu-description" name="description" rows="3"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="menu-price">Ціна (₴) *</label>
+                        <input type="number" class="form-control" id="menu-price" name="price" step="0.01" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="menu-cooking-time">Час готування (хв)</label>
+                        <input type="number" class="form-control" id="menu-cooking-time" name="cooking_time" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="menu-available" name="is_available" checked>
+                        Доступна для замовлення
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="hideModal('menu-modal')">Скасувати</button>
+            <button type="button" class="btn btn-primary" onclick="saveMenuItem()">Зберегти</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно замовлення -->
+<div id="order-modal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Нове замовлення</h3>
+            <button type="button" class="modal-close" onclick="hideModal('order-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="order-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="order-table">Столик *</label>
+                        <select class="form-control" id="order-table" name="table_id" required>
+                            <option value="">Оберіть столик</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="order-employee">Офіціант *</label>
+                        <select class="form-control" id="order-employee" name="employee_id" required>
+                            <option value="">Оберіть офіціанта</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="order-date">Дата</label>
+                        <input type="date" class="form-control" id="order-date" name="order_date">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="order-time">Час</label>
+                        <input type="time" class="form-control" id="order-time" name="order_time">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="order-status">Статус</label>
+                    <select class="form-control" id="order-status" name="status">
+                        <option value="Нове">Нове</option>
+                        <option value="Готується">Готується</option>
+                        <option value="Готове">Готове</option>
+                        <option value="Подано">Подано</option>
+                        <option value="Оплачено">Оплачено</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="hideModal('order-modal')">Скасувати</button>
+            <button type="button" class="btn btn-primary" onclick="saveOrder()">Створити</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно резервації -->
+<div id="reservation-modal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Додати/Редагувати резервацію</h3>
+            <button type="button" class="modal-close" onclick="hideModal('reservation-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="reservation-form">
+                <input type="hidden" id="reservation-id" name="id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="reservation-customer-name">Ім'я клієнта *</label>
+                        <input type="text" class="form-control" id="reservation-customer-name" name="customer_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reservation-customer-phone">Телефон</label>
+                        <input type="tel" class="form-control" id="reservation-customer-phone" name="customer_phone">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="reservation-date">Дата *</label>
+                        <input type="date" class="form-control" id="reservation-date" name="reservation_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reservation-time">Час *</label>
+                        <input type="time" class="form-control" id="reservation-time" name="reservation_time" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="reservation-table">Столик *</label>
+                        <select class="form-control" id="reservation-table" name="table_id" required>
+                            <option value="">Оберіть столик</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="reservation-guests">Кількість гостей *</label>
+                        <input type="number" class="form-control" id="reservation-guests" name="number_of_guests" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reservation-status">Статус</label>
+                    <select class="form-control" id="reservation-status" name="status">
+                        <option value="Підтверджено">Підтверджено</option>
+                        <option value="Прибули">Прибули</option>
+                        <option value="Не з'явились">Не з'явились</option>
+                        <option value="Скасовано">Скасовано</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reservation-notes">Примітки</label>
+                    <textarea class="form-control" id="reservation-notes" name="notes" rows="3"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="hideModal('reservation-modal')">Скасувати</button>
+            <button type="button" class="btn btn-primary" onclick="saveReservation()">Зберегти</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно столика -->
+<div id="table-modal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Додати/Редагувати столик</h3>
+            <button type="button" class="modal-close" onclick="hideModal('table-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="table-form">
+                <input type="hidden" id="table-id" name="id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="table-number">Номер столика *</label>
+                        <input type="number" class="form-control" id="table-number" name="table_number" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="table-capacity">Місткість *</label>
+                        <input type="number" class="form-control" id="table-capacity" name="capacity" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="table-location">Розташування</label>
+                    <input type="text" class="form-control" id="table-location" name="location" placeholder="Біля вікна, центр залу...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="table-available" name="is_available" checked>
+                        Доступний для резервації
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="hideModal('table-modal')">Скасувати</button>
+            <button type="button" class="btn btn-primary" onclick="saveTable()">Зберегти</button>
+        </div>
+    </div>
+</div>
+
+<!-- Модальне вікно співробітника -->
+<div id="employee-modal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3 class="modal-title">Додати/Редагувати співробітника</h3>
+            <button type="button" class="modal-close" onclick="hideModal('employee-modal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="employee-form">
+                <input type="hidden" id="employee-id" name="id">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="employee-first-name">Ім'я *</label>
+                        <input type="text" class="form-control" id="employee-first-name" name="first_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="employee-last-name">Прізвище *</label>
+                        <input type="text" class="form-control" id="employee-last-name" name="last_name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="employee-position">Посада *</label>
+                        <select class="form-control" id="employee-position" name="position" required>
+                            <option value="">Оберіть посаду</option>
+                            <option value="Офіціант">Офіціант</option>
+                            <option value="Кухар">Кухар</option>
+                            <option value="Бармен">Бармен</option>
+                            <option value="Менеджер">Менеджер</option>
+                            <option value="Адміністратор">Адміністратор</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="employee-hire-date">Дата прийняття *</label>
+                        <input type="date" class="form-control" id="employee-hire-date" name="hire_date" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="employee-phone">Телефон</label>
+                        <input type="tel" class="form-control" id="employee-phone" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="employee-email">Email</label>
+                        <input type="email" class="form-control" id="employee-email" name="email">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="employee-salary">Зарплата (₴)</label>
+                    <input type="number" class="form-control" id="employee-salary" name="salary" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <input type="checkbox" id="employee-active" name="is_active" checked>
+                        Активний співробітник
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="hideModal('employee-modal')">Скасувати</button>
+            <button type="button" class="btn btn-primary" onclick="saveEmployee()">Зберегти</button>
+        </div>
+    </div>
+</div>
+
+<!-- Підключаємо JavaScript -->
+<script src="js/utils.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

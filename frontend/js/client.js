@@ -1,4 +1,4 @@
-// js/client.js - Покращена логіка для клієнтської частини
+// js/client.js - Логіка клієнтської частини без резервації
 
 /**
  * Головний клас для управління клієнтською частиною
@@ -17,7 +17,6 @@ class RestaurantClient {
     async init() {
         this.setupEventListeners();
         this.setupSmoothScrolling();
-        this.setupDateRestrictions();
         this.setupScrollAnimations();
         this.setupMobileMenu();
         await this.loadInitialData();
@@ -28,36 +27,17 @@ class RestaurantClient {
      */
     setupEventListeners() {
         // Фільтри меню
-        const menuFilters = document.querySelectorAll('.menu-filters .btn-filter');
+        const menuFilters = document.querySelectorAll('.menu-filters .btn');
         menuFilters.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                this.filterMenu(e.target.dataset.category);
-                this.updateActiveFilter(e.target);
-            });
-        });
-
-        // Форма резервації
-        const reservationForm = document.getElementById('reservation-form');
-        if (reservationForm) {
-            reservationForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.handleReservationSubmit();
-            });
-
-            // Автооновлення доступних столиків
-            const dateInput = document.getElementById('reservation_date');
-            const timeInput = document.getElementById('reservation_time');
-            const guestsInput = document.getElementById('number_of_guests');
-
-            [dateInput, timeInput, guestsInput].forEach(input => {
-                if (input) {
-                    input.addEventListener('change', debounce(() => {
-                        this.updateAvailableTables();
-                    }, 500));
+                const category = e.target.dataset.category;
+                if (category) {
+                    this.filterMenu(category);
+                    this.updateActiveFilter(e.target);
                 }
             });
-        }
+        });
 
         // Рейтинг зірок
         this.setupRatingStars();
@@ -122,7 +102,7 @@ class RestaurantClient {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    const offsetTop = target.offsetTop - 80; // Врахування висоти навбару
+                    const offsetTop = target.offsetTop - 80;
 
                     window.scrollTo({
                         top: offsetTop,
@@ -131,24 +111,6 @@ class RestaurantClient {
                 }
             });
         });
-    }
-
-    /**
-     * Налаштування обмежень дати
-     */
-    setupDateRestrictions() {
-        const dateInput = document.getElementById('reservation_date');
-        if (dateInput) {
-            // Завтрашній день як мінімальна дата
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            dateInput.min = tomorrow.toISOString().split('T')[0];
-
-            // Максимум 3 місяці вперед
-            const maxDate = new Date();
-            maxDate.setMonth(maxDate.getMonth() + 3);
-            dateInput.max = maxDate.toISOString().split('T')[0];
-        }
     }
 
     /**
@@ -171,7 +133,6 @@ class RestaurantClient {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('fade-in');
-                    // Додаємо затримку для послідовної анімації
                     const delay = Math.random() * 200;
                     setTimeout(() => {
                         entry.target.style.animationDelay = '0s';
@@ -180,9 +141,8 @@ class RestaurantClient {
             });
         }, options);
 
-        // Спостерігаємо за елементами, які потребують анімації
         const elementsToObserve = document.querySelectorAll(
-            '.menu-item, .feedback-item, .info-card, .card'
+            '.menu-item, .feedback-item, .contact-card, .card'
         );
 
         elementsToObserve.forEach(el => {
@@ -197,12 +157,20 @@ class RestaurantClient {
         let toggleButton = document.querySelector('.navbar-toggle');
 
         if (!toggleButton) {
-            // Створюємо кнопку мобільного меню якщо її немає
-            const navbar = document.querySelector('.navbar-content');
-            if (navbar) {
+            const navbar = document.querySelector('.navbar .container');
+            if (navbar && window.innerWidth <= 768) {
                 toggleButton = document.createElement('button');
                 toggleButton.className = 'navbar-toggle';
-                toggleButton.innerHTML = '<span></span><span></span><span></span>';
+                toggleButton.innerHTML = '☰';
+                toggleButton.style.cssText = `
+                    display: block;
+                    background: none;
+                    border: none;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    color: var(--gray-700);
+                    padding: 0.5rem;
+                `;
                 navbar.appendChild(toggleButton);
             }
         }
@@ -213,7 +181,6 @@ class RestaurantClient {
             });
         }
 
-        // Закриваємо меню при кліку на посилання
         const navLinks = document.querySelectorAll('.nav-link');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -235,7 +202,6 @@ class RestaurantClient {
         if (navbarNav) {
             navbarNav.classList.toggle('show');
 
-            // Анімація кнопки
             if (toggleButton) {
                 toggleButton.classList.toggle('active');
             }
@@ -252,16 +218,13 @@ class RestaurantClient {
             this.isLoading = true;
             showLoading('Завантаження даних ресторану...');
 
-            // Завантажуємо дані послідовно для кращого UX
             await this.loadMenu();
-            await this.loadTables();
             await this.loadFeedback();
             await this.loadFeedbackStats();
 
             hideLoading();
             this.isLoading = false;
 
-            // Показуємо успішне завантаження
             this.showWelcomeMessage();
         } catch (error) {
             hideLoading();
@@ -275,7 +238,6 @@ class RestaurantClient {
      * Показати вітальне повідомлення
      */
     showWelcomeMessage() {
-        // Невелика затримка для кращого UX
         setTimeout(() => {
             showAlert('Ласкаво просимо до ресторану "Смачна кухня"! 🍽️', 'success', 4000);
         }, 500);
@@ -301,7 +263,7 @@ class RestaurantClient {
     }
 
     /**
-     * Відображення меню з покращеною анімацією
+     * Відображення меню
      */
     renderMenu(menuItems) {
         const container = document.getElementById('menu-container');
@@ -311,9 +273,6 @@ class RestaurantClient {
             container.innerHTML = this.getEmptyStateHTML('меню', 'Меню тимчасово недоступне');
             return;
         }
-
-        // Групуємо страви за категоріями для кращої організації
-        const groupedItems = this.groupItemsByCategory(menuItems);
 
         container.innerHTML = menuItems.map((item, index) => `
             <div class="menu-item" 
@@ -336,22 +295,7 @@ class RestaurantClient {
             </div>
         `).join('');
 
-        // Додаємо анімацію появи
         this.animateMenuItems();
-    }
-
-    /**
-     * Групування страв за категоріями
-     */
-    groupItemsByCategory(items) {
-        return items.reduce((groups, item) => {
-            const category = item.category;
-            if (!groups[category]) {
-                groups[category] = [];
-            }
-            groups[category].push(item);
-            return groups;
-        }, {});
     }
 
     /**
@@ -408,12 +352,11 @@ class RestaurantClient {
             }
         });
 
-        // Оновлюємо лічильник страв
         this.updateMenuItemsCount(category);
     }
 
     /**
-     * Оновлення лічильника страв
+     * Оновлення лічількa страв
      */
     updateMenuItemsCount(category) {
         const visibleItems = document.querySelectorAll('.menu-item[style*="block"], .menu-item:not([style])');
@@ -421,7 +364,6 @@ class RestaurantClient {
             document.querySelectorAll('.menu-item').length :
             visibleItems.length;
 
-        // Можна додати відображення кількості страв
         console.log(`Показано страв: ${count}`);
     }
 
@@ -429,166 +371,15 @@ class RestaurantClient {
      * Оновлення активного фільтра
      */
     updateActiveFilter(activeButton) {
-        document.querySelectorAll('.menu-filters .btn-filter').forEach(btn => {
+        document.querySelectorAll('.menu-filters .btn').forEach(btn => {
             btn.classList.remove('active');
         });
         activeButton.classList.add('active');
 
-        // Додаємо анімацію натискання
         activeButton.style.transform = 'scale(0.95)';
         setTimeout(() => {
             activeButton.style.transform = '';
         }, 150);
-    }
-
-    /**
-     * Завантаження столиків
-     */
-    async loadTables() {
-        try {
-            const response = await API.Tables.getAvailable();
-
-            if (response.success && response.data) {
-                this.renderTableOptions(response.data);
-                console.log(`Завантажено ${response.data.length} столиків`);
-            }
-        } catch (error) {
-            console.error('Помилка завантаження столиків:', error);
-            // Не показуємо помилку користувачу, це не критично
-        }
-    }
-
-    /**
-     * Відображення опцій столиків
-     */
-    renderTableOptions(tables) {
-        const select = document.getElementById('table_id');
-        if (!select) return;
-
-        // Очищуємо всі опції
-        select.innerHTML = '';
-
-        // Додаємо опцію за замовчуванням
-        const defaultOption = document.createElement('option');
-        defaultOption.value = '';
-        defaultOption.textContent = 'Оберіть столик';
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        select.appendChild(defaultOption);
-
-        // Додаємо столики
-        tables.forEach(table => {
-            const option = document.createElement('option');
-            option.value = table.id;
-            option.textContent = `Столик №${table.table_number} (${table.capacity} місць)${table.location ? ' - ' + table.location : ''}`;
-            select.appendChild(option);
-        });
-    }
-
-    /**
-     * Оновлення доступних столиків
-     */
-    async updateAvailableTables() {
-        const date = document.getElementById('reservation_date')?.value;
-        const time = document.getElementById('reservation_time')?.value;
-        const guests = document.getElementById('number_of_guests')?.value;
-
-        if (!date || !time || !guests) return;
-
-        try {
-            const response = await API.Tables.getAvailable();
-
-            if (response.success) {
-                // Фільтруємо столики за місткістю
-                const suitableTables = response.data.filter(table =>
-                    table.capacity >= parseInt(guests)
-                );
-
-                this.renderTableOptions(suitableTables);
-
-                // Показуємо підказку якщо немає підходящих столиків
-                if (suitableTables.length === 0) {
-                    showAlert(`Немає доступних столиків на ${guests} осіб. Спробуйте інший час або зменшіть кількість гостей.`, 'warning', 5000);
-                }
-            }
-        } catch (error) {
-            console.error('Помилка оновлення столиків:', error);
-        }
-    }
-
-    /**
-     * Обробка подання форми резервації
-     */
-    async handleReservationSubmit() {
-        if (!this.validateReservationForm()) {
-            return;
-        }
-
-        try {
-            showLoading('Створення резервації...');
-
-            const formData = getFormData('reservation-form');
-
-            // Додаткова валідація дати
-            const reservationDate = new Date(formData.reservation_date);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            if (reservationDate <= today) {
-                hideLoading();
-                showAlert('Дата резервації має бути не раніше завтрашнього дня', 'warning');
-                return;
-            }
-
-            const response = await API.Reservations.create(formData);
-
-            hideLoading();
-
-            if (response.success) {
-                showAlert('🎉 Резервацію успішно створено! Ми зв\'яжемося з вами для підтвердження найближчим часом.', 'success', 8000);
-                clearForm('reservation-form');
-                this.resetRating();
-
-                // Прокручуємо до секції резервації для показу успіху
-                document.getElementById('reservation').scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
-        } catch (error) {
-            hideLoading();
-            console.error('Помилка створення резервації:', error);
-            showAlert('❌ Помилка створення резервації: ' + error.message, 'danger');
-        }
-    }
-
-    /**
-     * Валідація форми резервації
-     */
-    validateReservationForm() {
-        if (!validateForm('reservation-form')) {
-            showAlert('⚠️ Будь ласка, заповніть всі обов\'язкові поля правильно', 'warning');
-            return false;
-        }
-
-        // Додаткові перевірки
-        const phone = document.getElementById('customer_phone')?.value;
-        if (phone && !this.isValidUkrainianPhone(phone)) {
-            showAlert('⚠️ Введіть коректний український номер телефону', 'warning');
-            document.getElementById('customer_phone')?.focus();
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Перевірка українського номера телефону
-     */
-    isValidUkrainianPhone(phone) {
-        const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
-        const ukrainianPhonePattern = /^(\+380|380|0)[0-9]{9}$/;
-        return ukrainianPhonePattern.test(cleanPhone);
     }
 
     /**
@@ -603,7 +394,6 @@ class RestaurantClient {
         this.highlightStars(rating);
         this.updateRatingText(rating);
 
-        // Додаємо анімацію вібрації
         const stars = document.querySelectorAll('.rating-stars .star');
         stars.forEach((star, index) => {
             if (index < rating) {
@@ -673,8 +463,6 @@ class RestaurantClient {
 
             const formData = getFormData('feedback-form');
             formData.rating = this.selectedRating;
-
-            // Встановлюємо поточну дату
             formData.feedback_date = new Date().toISOString().split('T')[0];
 
             const response = await API.Feedback.create(formData);
@@ -686,7 +474,6 @@ class RestaurantClient {
                 clearForm('feedback-form');
                 this.resetRating();
 
-                // Оновлюємо список відгуків і статистику
                 await this.loadFeedback();
                 await this.loadFeedbackStats();
             }
@@ -757,7 +544,6 @@ class RestaurantClient {
             </div>
         `).join('');
 
-        // Додаємо анімацію появи
         this.animateFeedbackItems();
     }
 
@@ -837,7 +623,7 @@ class RestaurantClient {
         const icons = {
             'меню': '🍽️',
             'відгуки': '💬',
-            'столики': '🪑'
+            'контакти': '📞'
         };
 
         return `
@@ -865,7 +651,7 @@ class RestaurantClient {
             }
         }
 
-        // Показ/приховання кнопки "вгору"
+        // Показ/приховування кнопки "вгору"
         this.toggleScrollToTopButton(scrollTop);
     }
 
@@ -933,7 +719,6 @@ class RestaurantClient {
 
         document.body.appendChild(button);
 
-        // Додаємо CSS для класу show
         const style = document.createElement('style');
         style.textContent = `
             .scroll-to-top-btn.show {
@@ -950,7 +735,6 @@ class RestaurantClient {
      * Обробка зміни розміру вікна
      */
     handleResize() {
-        // Закриваємо мобільне меню при збільшенні екрану
         if (window.innerWidth > 768) {
             const navbarNav = document.querySelector('.navbar-nav');
             if (navbarNav && navbarNav.classList.contains('show')) {
@@ -992,7 +776,6 @@ const bounceKeyframes = `
     }
 `;
 
-// Додаємо CSS анімації до сторінки
 const styleSheet = document.createElement('style');
 styleSheet.textContent = bounceKeyframes;
 document.head.appendChild(styleSheet);
