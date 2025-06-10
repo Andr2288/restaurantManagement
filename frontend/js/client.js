@@ -465,11 +465,18 @@ class RestaurantClient {
         const select = document.getElementById('table_id');
         if (!select) return;
 
-        // Очищуємо опції, крім першої
-        while (select.children.length > 1) {
-            select.removeChild(select.lastChild);
-        }
+        // Очищуємо всі опції
+        select.innerHTML = '';
 
+        // Додаємо опцію за замовчуванням
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Оберіть столик';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        select.appendChild(defaultOption);
+
+        // Додаємо столики
         tables.forEach(table => {
             const option = document.createElement('option');
             option.value = table.id;

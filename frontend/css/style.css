@@ -324,7 +324,7 @@ textarea.form-control {
 }
 
 .table tbody tr:hover {
-    background-color: var(--gray-50);
+    background-color: var(--gray-500);
 }
 
 .table-responsive {
